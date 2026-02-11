@@ -16,7 +16,8 @@ data_clean/
 data_clean_dir/
 data_effnet/
 results/
-models/
+models/*
+!models/effnet_best.keras
 
 # Node
 node_modules/
