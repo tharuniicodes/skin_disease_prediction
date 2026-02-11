@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Eczema | SkinCare AI</title>
+  <link rel="icon" type="image/svg+xml" href="assets/logo.svg">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/chatbot.css">
+</head>
+<body>
+
+<header class="page-topbar">
+  <div class="nav-left">
+    <img class="brand-logo" src="assets/logo.svg" alt="SkinCare AI logo">
+    <span class="brand-name">SkinCare AI</span>
+  </div>
+      <div class="nav-actions">
+    <a class="nav-btn" href="home.html">Home</a>
+    <a class="nav-btn" href="upload.html">Upload</a>
+    <a class="nav-btn" href="consultation.html">Consultation</a>
+    <a class="nav-btn" href="#" id="doubtsNavBtn">Doubts</a>
+    <a class="nav-btn" href="profile.html">Profile</a>
+    <a class="nav-btn" href="settings.html">Settings</a>
+    <a class="nav-btn" href="index.html" data-logout>Logout</a>
+  </div>
+</header>
+
+
+<div class="detail-page">
+  <h1>Eczema</h1>
+  <img src="images/eczema.jpg" alt="Eczema">
+
+  <p>
+    Eczema is a common skin condition that causes dry, itchy, and inflamed skin.
+    It can appear as red patches and may flare up due to allergens, stress, weather changes,
+    or certain skincare products.
+  </p>
+
+  <p>
+    Managing eczema usually involves regular moisturizing, using mild soaps, avoiding triggers,
+    and sometimes applying medicated creams. If symptoms are severe or persistent,
+    consulting a dermatologist is recommended.
+  </p>
+
+  <a class="back-link" href="home.html">← Back to Home</a>
+</div>
+
+  <script src="js/theme.js"></script>
+
+
+<section class="doubts-wrapper" id="doubtsSection">
+  <div class="doubt-card">
+    <h2>What does SkinCare AI do?</h2>
+    <p>
+      SkinCare AI uses Artificial Intelligence to analyze skin images and detect possible
+      skin conditions. It supports early awareness and better skin health decisions.
+    </p>
+  </div>
+
+  <div class="doubt-card">
+    <h2>How does it work?</h2>
+    <ul>
+      <li>Upload a clear image of the affected skin area</li>
+      <li>AI processes the image and detects the disease</li>
+      <li>Get insights and recommended remedies</li>
+    </ul>
+  </div>
+
+  <div class="doubt-card">
+    <h2>Why use SkinCare AI?</h2>
+    <ul>
+      <li>Quick and easy skin disease detection</li>
+      <li>Simple and user-friendly interface</li>
+      <li>Helps in early awareness and care</li>
+    </ul>
+  </div>
+</section>
+
+<script src="js/script.js"></script>
+<script>
+  if (localStorage.getItem("darkMode") === "enabled") {
+    document.body.classList.add("dark");
+  }
+</script>
+
+  <script src="js/chatbot.js"></script>
+</body>
+</html>

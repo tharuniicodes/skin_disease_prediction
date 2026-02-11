@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Upload</title>
+  <link rel="icon" type="image/svg+xml" href="assets/logo.svg">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/chatbot.css">
+</head>
+
+<body class="medical-theme-bg">
+
+<header class="page-topbar">
+  <div class="nav-left">
+    <img class="brand-logo" src="assets/logo.svg" alt="SkinCare AI logo">
+    <span class="brand-name">SkinCare AI</span>
+  </div>
+      <div class="nav-actions">
+    <a class="nav-btn" href="home.html">Home</a>
+    <a class="nav-btn" href="upload.html">Upload</a>
+    <a class="nav-btn" href="consultation.html">Consultation</a>
+    <a class="nav-btn" href="#" id="doubtsNavBtn">Doubts</a>
+    <a class="nav-btn" href="profile.html">Profile</a>
+    <a class="nav-btn" href="settings.html">Settings</a>
+    <a class="nav-btn" href="index.html" data-logout>Logout</a>
+  </div>
+</header>
+  <main class="dashboard-wrap">
+    <div class="dashboard">
+      <div class="dash-card upload-card">
+        <h2>Upload Skin Image</h2>
+        <p class="muted">Upload a clear skin image for the most accurate result.</p>
+
+        <label class="upload-box">
+          <input id="imageInput" type="file" accept="image/*" onchange="preview(event)">
+          <span class="upload-text">Click to choose or drag & drop</span>
+        </label>
+
+        <div class="preview-frame">
+          <img id="img" class="preview-img" alt="Preview">
+        </div>
+
+        <div class="upload-actions">
+          <button class="btn upload-btn" onclick="detect()">Detect</button>
+          <button class="btn upload-btn btn-clear" id="clearUpload" type="button">Clear</button>
+        </div>
+      </div>
+
+      <div class="dash-card result-card">
+        <h2>Detection Result</h2>
+        <p class="muted">Prediction appears after analysis.</p>
+
+        <div id="prediction" class="result-text"></div>
+        <div id="confidence" class="result-sub"></div>
+
+        <!-- ACTION BUTTONS (ADD ONLY) -->
+        <div class="action-buttons" id="actionButtons" style="display:none;">
+          <a href="insights.html" class="action-btn insight-btn">Insights</a>
+          <a href="remedies.html" class="action-btn remedy-btn">Remedies</a>
+        </div>
+
+        <!-- ACTION BUTTONS (ADD ONLY) -->
+        <div class="result-actions" id="resultActions" style="display:none;">
+          <a href="insights.html" class="result-btn">Insights</a>
+          <a href="remedies.html" class="result-btn">Remedies</a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="js/script.js"></script>
+  <script src="js/theme.js"></script>
+
+
+<section class="doubts-wrapper" id="doubtsSection">
+  <div class="doubt-card">
+    <h2>What does SkinCare AI do?</h2>
+    <p>
+      SkinCare AI uses Artificial Intelligence to analyze skin images and detect possible
+      skin conditions. It supports early awareness and better skin health decisions.
+    </p>
+  </div>
+
+  <div class="doubt-card">
+    <h2>How does it work?</h2>
+    <ul>
+      <li>Upload a clear image of the affected skin area</li>
+      <li>AI processes the image and detects the disease</li>
+      <li>Get insights and recommended remedies</li>
+    </ul>
+  </div>
+
+  <div class="doubt-card">
+    <h2>Why use SkinCare AI?</h2>
+    <ul>
+      <li>Quick and easy skin disease detection</li>
+      <li>Simple and user-friendly interface</li>
+      <li>Helps in early awareness and care</li>
+    </ul>
+  </div>
+</section>
+<script>
+  if (localStorage.getItem("darkMode") === "enabled") {
+    document.body.classList.add("dark");
+  }
+</script>
+
+  <script src="js/chatbot.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="SkinCare AI logo">
+  <defs>
+    <linearGradient id="scai" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#2563eb"/>
+      <stop offset="1" stop-color="#14b8a6"/>
+    </linearGradient>
+  </defs>
+  <circle cx="32" cy="32" r="28" fill="none" stroke="url(#scai)" stroke-width="4"/>
+  <path d="M32 14c6 3 10 4 14 4v10c0 9-6 16-14 20-8-4-14-11-14-20V18c4 0 8-1 14-4z" fill="#eef6ff" stroke="#2563eb" stroke-width="2"/>
+  <path d="M32 24v12m-6-6h12" stroke="#14b8a6" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="18" cy="32" r="2.5" fill="#14b8a6"/>
+  <circle cx="46" cy="32" r="2.5" fill="#2563eb"/>
+  <circle cx="32" cy="46" r="2.5" fill="#2563eb"/>
+  <path d="M20.5 32h7m8 0h7M32 39v5" stroke="#9cc3f5" stroke-width="2" stroke-linecap="round"/>
+</svg>

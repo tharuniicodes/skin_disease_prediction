@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Home | SkinCare AI</title>
+  <link rel="icon" type="image/svg+xml" href="assets/logo.svg">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/chatbot.css">
+</head>
+
+<body class="home-bg">
+
+<!-- HERO SECTION (NEW – DO NOT REMOVE OLD CONTENT) -->
+<section class="hero">
+
+  <!-- HERO TOP NAVBAR -->
+  <div class="hero-navbar">
+    <div class="hero-brand"><img class="brand-logo" src="assets/logo.svg" alt="SkinCare AI logo"><span>SkinCare AI</span></div>
+
+    <div class="hero-nav-links">
+      <a href="home.html">Home</a>
+      <a href="upload.html">Upload</a>
+      <a href="consultation.html">Consultation</a>
+      <a href="#" id="doubtsNavBtn">Doubts</a>
+      <a href="profile.html">Profile</a>
+      <a href="settings.html" class="btn-blue">Settings</a>
+      <a href="index.html" data-logout>Logout</a>
+    </div>
+  </div>
+
+  <!-- HERO IMAGE -->
+  <img src="images/hero-doctor.jpg" class="hero-bg" alt="Doctor examining skin">
+
+  <!-- HERO TEXT -->
+  <div class="hero-overlay">
+    <h1>Detect Skin Diseases Early</h1>
+    <h2>AI-Powered Skin Condition Analysis</h2>
+    <p>Upload an image of your skin condition and get an instant analysis.</p>
+  </div>
+
+</section>
+
+
+  <header class="topbar">
+    <h3 class="brand"><img class="brand-logo" src="assets/logo.svg" alt="SkinCare AI logo"><span>SkinCare AI</span></h3>
+
+    <div class="topbar-actions">
+
+      <button class="nav-btn" onclick="window.location.href='home.html'">
+        Home
+      </button>
+
+      <button class="nav-btn" onclick="window.location.href='upload.html'">
+        Upload
+      </button>
+
+      <button class="nav-btn" onclick="window.location.href='consultation.html'">
+        Consultation
+      </button>
+
+      <button class="nav-btn" onclick="window.location.href='profile.html'">
+        Profile
+      </button>
+
+      <button class="nav-btn" id="doubtsBtn">
+        Doubts
+      </button>
+
+      <button class="nav-btn" onclick="window.location.href='settings.html'">
+        Settings
+      </button>
+
+      <button class="nav-btn" data-logout>
+        Logout
+      </button>
+
+    </div>
+  </header>
+
+  <section class="doubts-wrapper" id="doubtsSection">
+    <button type="button" id="doubtsBackBtn" class="doubts-back-btn">← Back</button>
+    <div class="doubt-card">
+      <h2>What does SkinCare AI do?</h2>
+      <p>
+        SkinCare AI uses Artificial Intelligence to analyze skin images and detect possible
+        skin conditions. It supports early awareness and better skin health decisions.
+      </p>
+    </div>
+
+    <div class="doubt-card">
+      <h2>How does it work?</h2>
+      <ul>
+        <li>Upload a clear image of the affected skin area</li>
+        <li>AI processes the image and detects the disease</li>
+        <li>Get insights and recommended remedies</li>
+      </ul>
+    </div>
+
+    <div class="doubt-card">
+      <h2>Why use SkinCare AI?</h2>
+      <ul>
+        <li>Quick and easy skin disease detection</li>
+        <li>Simple and user-friendly interface</li>
+        <li>Helps in early awareness and care</li>
+      </ul>
+    </div>
+  </section>
+
+  <footer class="footer-simple">© 2026 Skin Disease Detection</footer>
+
+  <script src="js/script.js"></script>
+
+  <!-- COMMON SKIN CONDITIONS SECTION -->
+  <section class="conditions">
+    <h2 class="section-title">Common Skin Conditions We Diagnose</h2>
+
+    <div class="condition-grid">
+
+      <!-- CARD 1 -->
+      <div class="condition-card">
+        <img src="images/eczema.jpg" alt="Eczema">
+        <div class="condition-content">
+          <h3>Eczema</h3>
+          <p>Red, itchy, inflamed skin patches.</p>
+
+          <a class="read-more-btn" href="eczema.html">Read More</a>
+        </div>
+      </div>
+
+      <!-- CARD 2 -->
+      <div class="condition-card">
+        <img src="images/psoriasis.jpg" alt="Psoriasis">
+        <div class="condition-content">
+          <h3>Psoriasis</h3>
+          <p>Scaly red patches with silvery scales.</p>
+
+          <a class="read-more-btn" href="psoriasis.html">Read More</a>
+        </div>
+      </div>
+
+      <!-- CARD 3 -->
+      <div class="condition-card">
+        <img src="images/melanoma.jpg" alt="Melanoma">
+        <div class="condition-content">
+          <h3>Melanoma</h3>
+          <p>Suspicious dark moles or spots.</p>
+
+          <a class="read-more-btn" href="melanoma.html">Read More</a>
+        </div>
+      </div>
+
+      <!-- CARD 4 -->
+      <div class="condition-card">
+        <img src="images/impetigo.jpg" alt="Impetigo">
+        <div class="condition-content">
+          <h3>Impetigo</h3>
+          <p>Honey-colored crusts and sores on skin.</p>
+
+          <a class="read-more-btn" href="impetigo.html">Read More</a>
+        </div>
+      </div>
+
+      <!-- CARD 5 -->
+      <div class="condition-card">
+        <img src="images/acanthosis.jpg" alt="Acanthosis Nigricans">
+        <div class="condition-content">
+          <h3>Acanthosis Nigricans</h3>
+          <p>Dark, velvety skin in folds and creases.</p>
+
+          <a class="read-more-btn" href="acanthosis.html">Read More</a>
+        </div>
+      </div>
+
+      <!-- CARD 6 -->
+      <div class="condition-card">
+        <img src="images/keratosis.jpg" alt="Keratosis Pilaris">
+        <div class="condition-content">
+          <h3>Keratosis Pilaris</h3>
+          <p>Small rough bumps, often on arms or thighs.</p>
+
+          <a class="read-more-btn" href="keratosis.html">Read More</a>
+        </div>
+      </div>
+
+      <!-- CARD 7 -->
+      <div class="condition-card">
+        <img src="images/ichthyosis.jpg" alt="Epidermolytic Ichthyosis">
+        <div class="condition-content">
+          <h3>Epidermolytic Ichthyosis</h3>
+          <p>Thickened, scaly skin and blistering.</p>
+
+          <a class="read-more-btn" href="ichthyosis.html">Read More</a>
+        </div>
+      </div>
+
+      <!-- CARD 8 -->
+      <div class="condition-card">
+        <img src="images/morgellons.jpg" alt="Morgellons Disease">
+        <div class="condition-content">
+          <h3>Morgellons Disease</h3>
+          <p>Skin sores with crawling or stinging sensations.</p>
+
+          <a class="read-more-btn" href="morgellons.html">Read More</a>
+        </div>
+      </div>
+
+      <!-- CARD 9 -->
+      <div class="condition-card">
+        <img src="images/agep.jpg" alt="AGEP">
+        <div class="condition-content">
+          <h3>AGEP</h3>
+          <p>Sudden pustular eruption with fever.</p>
+
+          <a class="read-more-btn" href="agep.html">Read More</a>
+        </div>
+      </div>
+
+      <!-- CARD 10 -->
+      <div class="condition-card">
+        <img src="images/chromhidrosis.jpg" alt="Chromhidrosis">
+        <div class="condition-content">
+          <h3>Chromhidrosis</h3>
+          <p>Colored sweat from apocrine glands.</p>
+
+          <a class="read-more-btn" href="chromhidrosis.html">Read More</a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+
+  <script src="js/theme.js"></script>
+<script>
+  if (localStorage.getItem("darkMode") === "enabled") {
+    document.body.classList.add("dark");
+  }
+</script>
+
+  <script src="js/chatbot.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Settings | SkinCare AI</title>
+  <link rel="icon" type="image/svg+xml" href="assets/logo.svg">
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/settings.css" />
+  <link rel="stylesheet" href="css/chatbot.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="logo"><img class="brand-logo" src="assets/logo.svg" alt="SkinCare AI logo"><span>SkinCare AI</span></div>
+
+  <!-- Use nav-links (matches your home) -->
+  <nav class="nav-links">
+    <a href="home.html">Home</a>
+    <a href="upload.html">Upload</a>
+    <a href="consultation.html">Consultation</a>
+    <a href="#" id="doubtsNavBtn">Doubts</a>
+    <a href="profile.html">Profile</a>
+    <a href="settings.html">Settings</a>
+    <a href="index.html" data-logout>Logout</a>
+  </nav>
+</header>
+
+<main class="settings-wrap">
+  <div class="settings-container">
+
+    <!-- 1) Appearance & Accessibility -->
+    <section class="settings-card">
+      <div class="card-head">
+        <h2>Appearance & Accessibility</h2>
+        <p class="muted">Customize how SkinCare AI looks and feels.</p>
+      </div>
+
+      <div class="settings-grid">
+
+        <!-- Theme -->
+        <div class="setting-row">
+          <div class="setting-label">
+            <h4>Theme</h4>
+            <p class="muted">Choose Light or Dark theme.</p>
+          </div>
+          <div class="setting-control">
+            <div class="segmented" role="group" aria-label="Theme">
+              <input type="radio" name="theme" id="themeLight" value="light">
+              <label for="themeLight">Light</label>
+
+              <input type="radio" name="theme" id="themeDark" value="dark">
+              <label for="themeDark">Dark</label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Font Size -->
+        <div class="setting-row">
+          <div class="setting-label">
+            <h4>Font Size</h4>
+            <p class="muted">Improve readability across pages.</p>
+          </div>
+          <div class="setting-control">
+            <select id="fontSizeSelect" class="select">
+              <option value="small">Small</option>
+              <option value="medium">Medium</option>
+              <option value="large">Large</option>
+            </select>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 2) Account & Security -->
+    <section class="settings-card">
+      <div class="card-head">
+        <h2>Account & Security</h2>
+        <p class="muted">Manage your account and sign-in options.</p>
+      </div>
+
+      <div class="settings-grid">
+
+        <div class="setting-row">
+          <div class="setting-label">
+            <h4>Name</h4>
+            <p class="muted">Shown in your profile.</p>
+          </div>
+          <div class="setting-control">
+            <div class="readonly" id="displayName">—</div>
+          </div>
+        </div>
+
+        <div class="setting-row">
+          <div class="setting-label">
+            <h4>Email</h4>
+            <p class="muted">Used for login and notifications.</p>
+          </div>
+          <div class="setting-control">
+            <div class="readonly" id="displayEmail">—</div>
+          </div>
+        </div>
+
+        <div class="setting-row">
+          <div class="setting-label">
+            <h4>Security Actions</h4>
+            <p class="muted">Frontend demo buttons only.</p>
+          </div>
+          <div class="setting-control actions">
+            <button class="btn-secondary" id="changePasswordBtn" type="button">Change Password</button>
+            <span class="save-msg" id="passwordSuccessMsg">Password updated ✓</span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 3) Health Preferences -->
+    <section class="settings-card">
+      <div class="card-head">
+        <h2>Health Preferences</h2>
+        <p class="muted">These help personalize insights and recommendations.</p>
+      </div>
+
+      <div class="two-col">
+
+        <!-- Medical Conditions -->
+        <div class="subcard">
+          <h3>Medical Conditions</h3>
+          <div class="check-grid">
+            <label class="check"><input type="checkbox" id="condDiabetes"> Diabetes</label>
+            <label class="check"><input type="checkbox" id="condThyroid"> Thyroid</label>
+            <label class="check"><input type="checkbox" id="condPCOS"> PCOS</label>
+            <label class="check"><input type="checkbox" id="condAsthma"> Asthma</label>
+            <label class="check"><input type="checkbox" id="condHypertension"> Hypertension</label>
+            <label class="check"><input type="checkbox" id="condAutoimmune"> Autoimmune</label>
+          </div>
+        </div>
+
+        <!-- Vitamin Deficiencies -->
+        <div class="subcard">
+          <h3>Vitamin Deficiencies</h3>
+          <div class="check-grid">
+            <label class="check"><input type="checkbox" id="vitD"> Vitamin D</label>
+            <label class="check"><input type="checkbox" id="vitB12"> Vitamin B12</label>
+            <label class="check"><input type="checkbox" id="vitIron"> Iron</label>
+            <label class="check"><input type="checkbox" id="vitZinc"> Zinc</label>
+            <label class="check"><input type="checkbox" id="vitCalcium"> Calcium</label>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Lifestyle Defaults -->
+      <div class="subcard" style="margin-top:16px;">
+        <h3>Lifestyle Defaults</h3>
+
+        <div class="form-grid">
+          <div class="field">
+            <label>Skin Type</label>
+            <select id="skinTypeSelect" class="select">
+              <option value="Normal">Normal</option>
+              <option value="Oily">Oily</option>
+              <option value="Dry">Dry</option>
+              <option value="Combination">Combination</option>
+              <option value="Sensitive">Sensitive</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label>Sensitivity</label>
+            <select id="sensitivitySelect" class="select">
+              <option value="Low">Low</option>
+              <option value="Medium">Medium</option>
+              <option value="High">High</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label>Sleep Hours</label>
+            <input id="sleepHoursInput" type="number" min="0" max="24" class="input" placeholder="e.g., 7">
+          </div>
+
+          <div class="field">
+            <label>Water Intake (glasses)</label>
+            <input id="waterIntakeInput" type="number" min="0" max="30" class="input" placeholder="e.g., 8">
+          </div>
+
+          <div class="field">
+            <label>Stress Level</label>
+            <select id="stressSelect" class="select">
+              <option value="Low">Low</option>
+              <option value="Medium">Medium</option>
+              <option value="High">High</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="save-row">
+        <button class="btn" id="saveHealthPreferencesBtn" type="button">Save Health Preferences</button>
+      </div>
+    </section>
+
+    <!-- 4) AI & Scan Preferences -->
+    <section class="settings-card">
+      <div class="card-head">
+        <h2>AI & Scan Preferences</h2>
+        <p class="muted">Control AI behavior and result display.</p>
+      </div>
+
+      <div class="settings-grid">
+
+        <div class="setting-row">
+          <div class="setting-label">
+            <h4>Detection Sensitivity</h4>
+            <p class="muted">Higher may show more warnings.</p>
+          </div>
+          <div class="setting-control">
+            <select id="aiSensitivitySelect" class="select">
+              <option value="low">Low</option>
+              <option value="medium">Medium</option>
+              <option value="high">High</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="setting-row">
+          <div class="setting-label">
+            <h4>Auto Crop Image</h4>
+            <p class="muted">Helps focus on the affected area.</p>
+          </div>
+          <div class="setting-control">
+            <label class="switch">
+              <input type="checkbox" id="autoCropToggle">
+              <span class="slider"></span>
+            </label>
+          </div>
+        </div>
+
+        <div class="setting-row">
+          <div class="setting-label">
+            <h4>Show Confidence Score</h4>
+            <p class="muted">Display AI confidence percentage.</p>
+          </div>
+          <div class="setting-control">
+            <label class="switch">
+              <input type="checkbox" id="showConfidenceToggle">
+              <span class="slider"></span>
+            </label>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="save-row">
+        <button class="btn" id="saveAIPreferencesBtn" type="button">Save AI Preferences</button>
+      </div>
+    </section>
+
+    <!-- 5) Notifications -->
+    <section class="settings-card">
+      <div class="card-head">
+        <h2>Notifications</h2>
+        <p class="muted">Choose what we notify you about.</p>
+      </div>
+
+      <div class="settings-grid">
+
+        <div class="setting-row">
+          <div class="setting-label">
+            <h4>Scan Result Alerts</h4>
+            <p class="muted">Notify when results are ready.</p>
+          </div>
+          <div class="setting-control">
+            <label class="switch">
+              <input type="checkbox" id="notifScanToggle">
+              <span class="slider"></span>
+            </label>
+          </div>
+        </div>
+
+        <div class="setting-row">
+          <div class="setting-label">
+            <h4>Health Reminders</h4>
+            <p class="muted">Daily water, sleep, skin care reminders.</p>
+          </div>
+          <div class="setting-control">
+            <label class="switch">
+              <input type="checkbox" id="notifRemindersToggle">
+              <span class="slider"></span>
+            </label>
+          </div>
+        </div>
+
+        <div class="setting-row">
+          <div class="setting-label">
+            <h4>Email Notifications</h4>
+            <p class="muted">Receive updates via email.</p>
+          </div>
+          <div class="setting-control">
+            <label class="switch">
+              <input type="checkbox" id="notifEmailToggle">
+              <span class="slider"></span>
+            </label>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="save-row">
+        <button class="btn" id="saveNotificationsBtn" type="button">Save Notifications</button>
+      </div>
+    </section>
+
+    <!-- 6) Privacy & Data -->
+    <section class="settings-card">
+      <div class="card-head">
+        <h2>Privacy & Data</h2>
+        <p class="muted">Control what data is stored and how.</p>
+      </div>
+
+      <div class="settings-grid">
+
+        <div class="setting-row">
+          <div class="setting-label">
+            <h4>Store Scan History</h4>
+            <p class="muted">Keep your previous detections in Profile history.</p>
+          </div>
+          <div class="setting-control">
+            <label class="switch">
+              <input type="checkbox" id="storeHistoryToggle">
+              <span class="slider"></span>
+            </label>
+          </div>
+        </div>
+
+        <div class="setting-row">
+          <div class="setting-label">
+            <h4>Anonymize Stored Images</h4>
+            <p class="muted">Reduce identifiable data in saved scans.</p>
+          </div>
+          <div class="setting-control">
+            <label class="switch">
+              <input type="checkbox" id="anonymizeToggle">
+              <span class="slider"></span>
+            </label>
+          </div>
+        </div>
+
+        <div class="setting-row">
+          <div class="setting-label">
+            <h4>Data Actions</h4>
+            <p class="muted">Frontend demo actions (localStorage only).</p>
+          </div>
+          <div class="setting-control actions">
+            <button class="btn-secondary" id="clearHistoryBtn" type="button">Clear Scan History</button>
+            <button class="btn-danger" id="resetAllBtn" type="button">Reset All User Data</button>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 7) App Info & Support -->
+    <section class="settings-card">
+      <div class="card-head">
+        <h2>App Info & Support</h2>
+        <p class="muted">Help, legal, and app information.</p>
+      </div>
+
+      <div class="settings-grid">
+
+        <div class="setting-row">
+          <div class="setting-label">
+            <h4>App Version</h4>
+            <p class="muted">Current build version.</p>
+          </div>
+          <div class="setting-control">
+            <div class="readonly">v1.0.0</div>
+          </div>
+        </div>
+
+        <div class="setting-row">
+          <div class="setting-label">
+            <h4>AI Model</h4>
+            <p class="muted">Model name/version (demo).</p>
+          </div>
+          <div class="setting-control">
+            <div class="readonly">SkinCareAI-Classifier (Demo)</div>
+          </div>
+        </div>
+
+        <div class="setting-row">
+          <div class="setting-label">
+            <h4>Last Updated</h4>
+            <p class="muted">Latest release date.</p>
+          </div>
+          <div class="setting-control">
+            <div class="readonly">Jan 29, 2026</div>
+          </div>
+        </div>
+
+        <div class="setting-row">
+          <div class="setting-label">
+            <h4>Support Links</h4>
+            <p class="muted">Open help and policy pages.</p>
+          </div>
+          <div class="setting-control linklist">
+            <a href="#" class="link">Privacy Policy</a>
+            <a href="#" class="link">Terms & Conditions</a>
+            <a href="#" class="link">Contact Support</a>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<script src="js/settings.js"></script>
+<script src="js/theme.js"></script>
+<script>
+  function toggleDarkMode() {
+    document.body.classList.toggle("dark");
+
+    // save state
+    if (document.body.classList.contains("dark")) {
+      localStorage.setItem("darkMode", "enabled");
+    } else {
+      localStorage.setItem("darkMode", "disabled");
+    }
+  }
+</script>
+
+<!-- Change Password Modal -->
+<div class="modal-overlay" id="passwordModal" aria-hidden="true">
+  <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="passwordModalTitle">
+    <div class="modal-head">
+      <h3 id="passwordModalTitle">Change Password</h3>
+      <button type="button" class="modal-close" id="passwordModalClose" aria-label="Close">×</button>
+    </div>
+
+    <div class="modal-body">
+      <label class="modal-label" for="currentPasswordInput">Current Password</label>
+      <input class="modal-input" type="password" id="currentPasswordInput" placeholder="Enter current password">
+
+      <label class="modal-label" for="newPasswordInput">New Password</label>
+      <input class="modal-input" type="password" id="newPasswordInput" placeholder="Enter new password">
+
+      <label class="modal-label" for="confirmPasswordInput">Confirm New Password</label>
+      <input class="modal-input" type="password" id="confirmPasswordInput" placeholder="Re-enter new password">
+
+      <div class="modal-error" id="passwordError" role="alert"></div>
+    </div>
+
+    <div class="modal-actions">
+      <button type="button" class="btn-secondary" id="passwordCancelBtn">Cancel</button>
+      <button type="button" class="btn" id="passwordSaveBtn">Save</button>
+    </div>
+  </div>
+</div>
+
+
+<section class="doubts-wrapper" id="doubtsSection">
+  <div class="doubt-card">
+    <h2>What does SkinCare AI do?</h2>
+    <p>
+      SkinCare AI uses Artificial Intelligence to analyze skin images and detect possible
+      skin conditions. It supports early awareness and better skin health decisions.
+    </p>
+  </div>
+
+  <div class="doubt-card">
+    <h2>How does it work?</h2>
+    <ul>
+      <li>Upload a clear image of the affected skin area</li>
+      <li>AI processes the image and detects the disease</li>
+      <li>Get insights and recommended remedies</li>
+    </ul>
+  </div>
+
+  <div class="doubt-card">
+    <h2>Why use SkinCare AI?</h2>
+    <ul>
+      <li>Quick and easy skin disease detection</li>
+      <li>Simple and user-friendly interface</li>
+      <li>Helps in early awareness and care</li>
+    </ul>
+  </div>
+</section>
+
+<script src="js/script.js"></script>
+<script>
+  if (localStorage.getItem("darkMode") === "enabled") {
+    document.body.classList.add("dark");
+  }
+</script>
+
+  <script src="js/chatbot.js"></script>
+</body>
+</html>

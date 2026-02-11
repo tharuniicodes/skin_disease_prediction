@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Profile | SkinCare AI</title>
+  <link rel="icon" type="image/svg+xml" href="assets/logo.svg">
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/chatbot.css">
+</head>
+<body>
+
+<!-- TOP BAR -->
+<header class="topbar">
+  <div class="logo"><img class="brand-logo" src="assets/logo.svg" alt="SkinCare AI logo"><span>SkinCare AI</span></div>
+  <nav class="nav-links">
+    <a href="home.html">Home</a>
+    <a href="upload.html">Upload</a>
+    <a href="consultation.html">Consultation</a>
+    <a href="#" id="doubtsNavBtn">Doubts</a>
+    <a href="profile.html">Profile</a>
+    <a href="settings.html">Settings</a>
+    <a href="index.html" data-logout>Logout</a>
+  </nav>
+</header>
+
+<!-- PROFILE PAGE WRAPPER -->
+<div class="dashboard-wrap">
+  <div class="dashboard">
+
+    <!-- PROFILE SUMMARY CARD -->
+    <div class="dash-card">
+      <h2>Tharuni</h2>
+      <p class="muted">tharuni@example.com • 21 • Female • India</p>
+
+      <p style="margin-top:10px;"><strong>Risk:</strong> Low</p>
+
+      <div style="margin-top:20px; display:flex; gap:12px;">
+        <button id="editHealthBtn">Edit Health History</button>
+        <button id="logoutBtn" class="btn" style="background:#64748b;">Logout</button>
+      </div>
+
+      <hr style="margin:25px 0;">
+
+      <div class="risk-meter-card">
+        <div class="risk-meter-head">
+          <h3>Skin Risk Indicator</h3>
+          <div class="risk-meter-value">
+            <span id="riskLabel">Low Risk</span>
+            <span id="riskPercent">25%</span>
+          </div>
+        </div>
+        <div class="risk-meter-track">
+          <div class="risk-meter-fill" id="riskFill"></div>
+        </div>
+      </div>
+
+      <div class="insights-card">
+        <h3>AI Personalized Insights</h3>
+        <div class="insights-list" id="aiInsights"></div>
+      </div>
+    </div>
+
+    <!-- MEDICAL CONDITIONS CARD -->
+    <div class="dash-card">
+      <h2>Medical Conditions</h2>
+      <p class="muted">These conditions can influence skin health.</p>
+
+      <div id="medicalConditions" style="margin-top:18px;">
+        <div class="conditions-wrapper">
+          <div class="condition-card">
+            <div class="condition-left">
+              <div class="condition-icon">🧬</div>
+              <div class="condition-name">PCOS / Hormonal</div>
+            </div>
+            <div class="condition-risk moderate">Moderate Impact</div>
+          </div>
+
+          <div class="condition-card">
+            <div class="condition-left">
+              <div class="condition-icon">🫁</div>
+              <div class="condition-name">Asthma</div>
+            </div>
+            <div class="condition-risk mild">Mild Impact</div>
+          </div>
+        </div>
+
+        <div class="condition-summary">
+          <p>These conditions may influence:</p>
+          <ul>
+            <li>Hormonal acne susceptibility</li>
+            <li>Skin barrier sensitivity</li>
+            <li>Inflammation and dryness</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- LIFESTYLE CARD -->
+    <div class="dash-card">
+      <h2>Lifestyle</h2>
+      <p class="muted">Daily habits that affect your skin condition.</p>
+
+      <div style="margin-top:20px; display:grid; grid-template-columns:repeat(2,1fr); gap:16px;">
+        <div class="life-box"><strong>Skin Type</strong><br><span id="skinType">Sensitive</span></div>
+        <div class="life-box"><strong>Sensitivity</strong><br><span id="sensitivity">High</span></div>
+        <div class="life-box"><strong>Sleep</strong><br><span id="sleep">7 hrs</span></div>
+        <div class="life-box"><strong>Water</strong><br><span id="water">8 glasses</span></div>
+        <div class="life-box"><strong>Stress</strong><br><span id="stress">Medium</span></div>
+      </div>
+    </div>
+
+    <!-- SKIN DISEASE HISTORY CARD -->
+    <div class="dash-card">
+      <h2>Skin Disease History</h2>
+      <p class="muted">Previous AI detections for this user.</p>
+
+      <div class="empty-history" id="emptyHistory">
+        <p>No scan history yet.</p>
+        <a href="upload.html" class="btn-primary">Go to Upload</a>
+      </div>
+
+      <div class="history-list" id="historyList"></div>
+
+      <button id="clearHistoryBtn" style="margin-top:20px; background:#ef4444;">Clear History</button>
+    </div>
+
+  </div>
+</div>
+
+  <script src="js/profile.js"></script>
+  <script src="js/riskEngine.js"></script>
+  <script src="js/theme.js"></script>
+
+
+<section class="doubts-wrapper" id="doubtsSection">
+  <div class="doubt-card">
+    <h2>What does SkinCare AI do?</h2>
+    <p>
+      SkinCare AI uses Artificial Intelligence to analyze skin images and detect possible
+      skin conditions. It supports early awareness and better skin health decisions.
+    </p>
+  </div>
+
+  <div class="doubt-card">
+    <h2>How does it work?</h2>
+    <ul>
+      <li>Upload a clear image of the affected skin area</li>
+      <li>AI processes the image and detects the disease</li>
+      <li>Get insights and recommended remedies</li>
+    </ul>
+  </div>
+
+  <div class="doubt-card">
+    <h2>Why use SkinCare AI?</h2>
+    <ul>
+      <li>Quick and easy skin disease detection</li>
+      <li>Simple and user-friendly interface</li>
+      <li>Helps in early awareness and care</li>
+    </ul>
+  </div>
+</section>
+
+<script src="js/script.js"></script>
+<script>
+  if (localStorage.getItem("darkMode") === "enabled") {
+    document.body.classList.add("dark");
+  }
+</script>
+
+  <script src="js/chatbot.js"></script>
+</body>
+</html>

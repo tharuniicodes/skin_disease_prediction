@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.log
+.venv/
+venv/
+features/
+
+# Mac
+.DS_Store
+
+# Dataset folders (DO NOT PUSH)
+data_raw/
+data_clean/
+data_clean_dir/
+data_effnet/
+results/
+models/
+
+# Node
+node_modules/
+
+# Environment files
+.env

@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Insights</title>
+  <link rel="icon" type="image/svg+xml" href="assets/logo.svg">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/chatbot.css">
+</head>
+<body>
+
+<header class="page-topbar">
+  <div class="nav-left">
+    <img class="brand-logo" src="assets/logo.svg" alt="SkinCare AI logo">
+    <span class="brand-name">SkinCare AI</span>
+  </div>
+      <div class="nav-actions">
+    <a class="nav-btn" href="home.html">Home</a>
+    <a class="nav-btn" href="upload.html">Upload</a>
+    <a class="nav-btn" href="consultation.html">Consultation</a>
+    <a class="nav-btn" href="#" id="doubtsNavBtn">Doubts</a>
+    <a class="nav-btn" href="profile.html">Profile</a>
+    <a class="nav-btn" href="settings.html">Settings</a>
+    <a class="nav-btn" href="index.html" data-logout>Logout</a>
+  </div>
+</header>
+
+<section class="insights-hero">
+  <div class="insights-container">
+    <div class="insights-panel">
+      <h1 class="page-title">AI Detection Insights</h1>
+      <p class="insights-subtitle">AI-generated explanations based on your latest skin analysis.</p>
+
+      <div class="insights-summary">
+        <div class="summary-card" id="predictionSummary">
+          <div class="summary-accent"></div>
+          <div class="summary-content">
+            <div class="summary-label">Prediction Summary</div>
+            <div class="summary-disease" id="summaryDisease">Detected Condition</div>
+            <div class="summary-meta" id="summaryConfidence">AI Confidence: High</div>
+            <div class="summary-note" id="summaryNote"></div>
+          </div>
+        </div>
+
+        <div class="image-card" id="imageCard" style="display:none;">
+          <div class="image-title">Uploaded Image</div>
+          <img id="insightsImage" alt="Uploaded skin image" />
+        </div>
+      </div>
+
+      <div id="insightGrid" class="insight-grid"></div>
+
+      <button class="back-btn" onclick="goBack()">⬅ Back</button>
+    </div>
+  </div>
+</section>
+
+<script>
+  const disease = (localStorage.getItem("predictedDisease") || "").toLowerCase();
+  const predictionResultRaw = localStorage.getItem("predictionResult");
+  let predictionResult = null;
+  try {
+    predictionResult = predictionResultRaw ? JSON.parse(predictionResultRaw) : null;
+  } catch {
+    predictionResult = null;
+  }
+
+  const insightsMap = {
+    eczema: [
+      { title: "Skin Barrier Disruption", text: "Eczema often involves a weakened skin barrier, which allows moisture to escape and irritants to enter more easily." },
+      { title: "Inflammatory Pattern", text: "The redness and itching are driven by inflammation, which can flare with stress or environmental changes." },
+      { title: "Trigger Sensitivity", text: "Common triggers include harsh soaps, allergens, and dry air, which can make symptoms feel worse." },
+      { title: "Cycle of Itch and Irritation", text: "Scratching can irritate the skin further and prolong flare-ups, making symptoms feel persistent." },
+      { title: "Relapsing Nature", text: "Eczema often improves and worsens over time, so consistency in care matters." },
+      { title: "Location Patterns", text: "It commonly appears on flexural areas like elbows, knees, and neck, but can vary by person." }
+    ],
+    melanoma: [
+      { title: "Pigment Cell Changes", text: "Melanoma develops from pigment-producing cells, which can cause unusual color or shape changes." },
+      { title: "Rapid Evolution", text: "It may change in size, border, or color faster than typical moles, which is why monitoring matters." },
+      { title: "Sun Exposure Link", text: "UV exposure is a major factor, especially with repeated sunburns over time." },
+      { title: "Irregular Patterns", text: "Asymmetry and uneven borders are common visual signs that distinguish it from benign moles." },
+      { title: "Early Detection Benefit", text: "Identifying changes early improves the chance of effective clinical management." },
+      { title: "New or Changing Spots", text: "New spots in adulthood or noticeable changes in existing moles deserve attention." }
+    ],
+    psoriasis: [
+      { title: "Immune-Driven Condition", text: "Psoriasis involves an overactive immune response that speeds up skin cell turnover." },
+      { title: "Thicker Skin Build-Up", text: "The rapid turnover can cause thick, scaly patches that feel raised and dry." },
+      { title: "Flare Cycle", text: "Symptoms often flare and subside, influenced by stress, illness, or skin injury." },
+      { title: "Common Locations", text: "It often appears on elbows, knees, scalp, and lower back, though it can occur elsewhere." },
+      { title: "Inflammation Signals", text: "Redness and scaling reflect deeper inflammation beneath the surface." },
+      { title: "Sensitivity to Irritation", text: "Skin can be more reactive to friction, harsh products, or temperature changes." }
+    ],
+    bcc: [
+      { title: "Slow-Growing Nature", text: "Basal cell carcinoma typically grows slowly, often appearing as a persistent spot or bump." },
+      { title: "Sun Exposure Connection", text: "Long-term UV exposure is a primary factor in the development of BCC." },
+      { title: "Local Skin Changes", text: "It tends to stay localized but can cause skin damage if ignored." },
+      { title: "Common Areas", text: "Most often appears on sun-exposed areas like the face, ears, or neck." },
+      { title: "Subtle Appearance", text: "It can look like a shiny bump, sore that doesn’t heal, or a scaly patch." },
+      { title: "Importance of Evaluation", text: "Clinical assessment helps confirm the type of lesion and next steps." }
+    ],
+    nv: [
+      { title: "Benign Mole Patterns", text: "Melanocytic nevi are typically benign moles formed by pigment cell clusters." },
+      { title: "Stable Appearance", text: "Most moles stay consistent in size and color over time." },
+      { title: "Change Monitoring", text: "Any change in size, border, or color is worth professional review." },
+      { title: "Sun Influence", text: "Sun exposure can darken moles or increase the chance of new ones appearing." },
+      { title: "Common Distribution", text: "They can appear anywhere on the body and vary in number by person." },
+      { title: "Visual Similarities", text: "Some benign moles can resemble other lesions, making monitoring important." }
+    ],
+    bkl: [
+      { title: "Benign Growth Type", text: "Benign keratosis-like lesions are non-cancerous skin growths." },
+      { title: "Texture Changes", text: "They can feel rough or scaly and may look wart-like." },
+      { title: "Age-Related Tendency", text: "These lesions are more common with aging and sun exposure." },
+      { title: "Color Variation", text: "They can vary in color from light tan to darker brown." },
+      { title: "Surface Appearance", text: "The surface may look stuck-on, which is a common feature." },
+      { title: "Monitoring Value", text: "If a lesion changes quickly, a clinician can help confirm the type." }
+    ],
+    tinea: [
+      { title: "Fungal Origin", text: "Tinea is a fungal infection that thrives in warm, moist environments." },
+      { title: "Ring-Like Pattern", text: "It often forms circular or ring-shaped patches with clearer centers." },
+      { title: "Contagious Potential", text: "It can spread through direct contact or shared items." },
+      { title: "Common Locations", text: "It often affects feet, groin, scalp, or body folds." },
+      { title: "Itch and Irritation", text: "Itching is common and can worsen with sweat or friction." },
+      { title: "Recurrence Risk", text: "Reinfection is possible if the environment remains warm and damp." }
+    ],
+    warts: [
+      { title: "Viral Cause", text: "Warts are caused by HPV, which triggers excess skin growth." },
+      { title: "Surface Texture", text: "They often feel rough or grainy and can appear in clusters." },
+      { title: "Spread by Contact", text: "They can spread through direct contact or shared surfaces." },
+      { title: "Common Areas", text: "Hands, fingers, and feet are frequent locations." },
+      { title: "Slow Changes", text: "Warts can persist for a long time and change gradually." },
+      { title: "Skin Sensitivity", text: "Surrounding skin may become irritated with friction." }
+    ],
+    fallback: [
+      { title: "Skin Barrier Health", text: "Many skin conditions involve changes in the skin barrier, affecting moisture and protection." },
+      { title: "Inflammation Signals", text: "Redness, itching, and scaling often reflect underlying inflammation." },
+      { title: "Triggers Vary", text: "Stress, climate, products, and genetics can all influence symptoms." },
+      { title: "Pattern Awareness", text: "Tracking how skin changes over time helps identify patterns." },
+      { title: "Visual Similarities", text: "Different conditions can look similar, which is why professional review matters." },
+      { title: "Consistency Helps", text: "Consistent skin care routines often support more stable skin." }
+    ]
+  };
+
+  const insights = insightsMap[disease] || insightsMap.fallback;
+
+  const summaryDisease = document.getElementById("summaryDisease");
+  const summaryConfidence = document.getElementById("summaryConfidence");
+  const summaryNote = document.getElementById("summaryNote");
+  const imageCard = document.getElementById("imageCard");
+  const insightsImage = document.getElementById("insightsImage");
+
+  if (summaryDisease) {
+    summaryDisease.textContent = disease ? disease.toUpperCase() : "SKIN CONDITION";
+  }
+  if (summaryConfidence) {
+    if (predictionResult && typeof predictionResult.confidence === "number") {
+      const pct = Math.round(predictionResult.confidence * 100);
+      summaryConfidence.textContent = `AI Confidence: ${pct}%`;
+    } else {
+      summaryConfidence.textContent = "AI Confidence: High";
+    }
+  }
+  if (summaryNote) {
+    const noteMap = {
+      eczema: "This condition often reflects a sensitive skin barrier with recurring inflammation.",
+      melanoma: "This condition involves pigment cells and can change over time, so monitoring matters.",
+      psoriasis: "This condition is driven by immune activity that speeds up skin turnover.",
+      bcc: "This condition often develops slowly on sun-exposed skin.",
+      nv: "This condition is usually benign but should be monitored for changes.",
+      bkl: "This condition is typically non-cancerous with surface texture changes.",
+      tinea: "This condition is fungal and thrives in warm, moist areas.",
+      warts: "This condition is viral and can spread through contact."
+    };
+    summaryNote.textContent = noteMap[disease] || "This condition affects skin appearance and can vary between individuals.";
+  }
+
+  const storedImage = localStorage.getItem("uploadedImage");
+  if (storedImage && insightsImage && imageCard) {
+    insightsImage.src = storedImage;
+    imageCard.style.display = "block";
+  }
+
+  const grid = document.getElementById("insightGrid");
+
+  insights.forEach((item) => {
+    grid.innerHTML += `
+      <div class="insight-card">
+        <h3>${item.title}</h3>
+        <p>${item.text}</p>
+      </div>
+    `;
+  });
+
+  function goBack() {
+    window.history.back();
+  }
+</script>
+
+  <script src="js/theme.js"></script>
+
+
+<section class="doubts-wrapper" id="doubtsSection">
+  <div class="doubt-card">
+    <h2>What does SkinCare AI do?</h2>
+    <p>
+      SkinCare AI uses Artificial Intelligence to analyze skin images and detect possible
+      skin conditions. It supports early awareness and better skin health decisions.
+    </p>
+  </div>
+
+  <div class="doubt-card">
+    <h2>How does it work?</h2>
+    <ul>
+      <li>Upload a clear image of the affected skin area</li>
+      <li>AI processes the image and detects the disease</li>
+      <li>Get insights and recommended remedies</li>
+    </ul>
+  </div>
+
+  <div class="doubt-card">
+    <h2>Why use SkinCare AI?</h2>
+    <ul>
+      <li>Quick and easy skin disease detection</li>
+      <li>Simple and user-friendly interface</li>
+      <li>Helps in early awareness and care</li>
+    </ul>
+  </div>
+</section>
+
+<script src="js/script.js"></script>
+<script>
+  if (localStorage.getItem("darkMode") === "enabled") {
+    document.body.classList.add("dark");
+  }
+</script>
+
+  <script src="js/chatbot.js"></script>
+</body>
+</html>

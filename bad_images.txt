@@ -1,0 +1,1 @@
+data_effnet/train/5. Melanocytic Nevi (NV) - 7970/ISIC_0027524.jpg

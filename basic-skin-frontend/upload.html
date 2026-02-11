@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Upload</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+  <h3>Upload Image</h3>
+  <div class="profile" onclick="profile()"></div>
+</header>
+
+<div class="container">
+  <input type="file" accept="image/*" onchange="preview(event)">
+  <img id="img">
+  <button onclick="detect()">Detect</button>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

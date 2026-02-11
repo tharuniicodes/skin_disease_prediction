@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Remedies</title>
+  <link rel="icon" type="image/svg+xml" href="assets/logo.svg">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/chatbot.css">
+</head>
+<body>
+
+<header class="page-topbar">
+  <div class="nav-left">
+    <img class="brand-logo" src="assets/logo.svg" alt="SkinCare AI logo">
+    <span class="brand-name">SkinCare AI</span>
+  </div>
+      <div class="nav-actions">
+    <a class="nav-btn" href="home.html">Home</a>
+    <a class="nav-btn" href="upload.html">Upload</a>
+    <a class="nav-btn" href="consultation.html">Consultation</a>
+    <a class="nav-btn" href="#" id="doubtsNavBtn">Doubts</a>
+    <a class="nav-btn" href="profile.html">Profile</a>
+    <a class="nav-btn" href="settings.html">Settings</a>
+    <a class="nav-btn" href="index.html" data-logout>Logout</a>
+  </div>
+</header>
+
+<section class="remedies-hero">
+  <div class="remedies-content">
+    <div class="remedies-panel">
+      <div class="remedies-header">
+        <h2>Remedies</h2>
+        <p class="remedies-subtitle">
+          Personalized care recommendations based on your skin analysis
+        </p>
+      </div>
+
+      <div class="remedies-wrapper">
+        <div class="remedy-card do">
+          <h3>Things To Do</h3>
+          <ul id="do-list"></ul>
+        </div>
+
+        <div class="remedy-card avoid">
+          <h3>Things To Avoid</h3>
+          <ul id="avoid-list"></ul>
+        </div>
+
+        <div class="remedy-card food">
+          <h3>Food Precautions</h3>
+          <ul id="food-list"></ul>
+        </div>
+
+        <div class="remedy-card daily">
+          <h3>Daily Care Routine</h3>
+          <ul>
+            <li>Cleanse gently in the morning and evening</li>
+            <li>Keep skin clean and dry after sweating</li>
+            <li>Choose soft, breathable fabrics for daily wear</li>
+            <li>Stick to a consistent skincare routine</li>
+            <li>Avoid moisture buildup in folds or covered areas</li>
+            <li>Maintain overall hygiene and change linens regularly</li>
+            <li>Moisturize after bathing with a gentle product</li>
+            <li>Keep nails trimmed to reduce skin irritation</li>
+          </ul>
+        </div>
+      </div>
+
+      <a class="remedies-back" href="upload.html">Back to Upload</a>
+    </div>
+  </div>
+</section>
+<p class="remedies-disclaimer">Consult a nearby doctor as soon as possible.</p>
+
+  <script src="js/theme.js"></script>
+    <script>
+    /* =========================
+       STEP 1: GET RAW LABEL
+       ========================= */
+    const raw = localStorage.getItem("predictedDisease") || "";
+    console.log("Raw disease:", raw);
+
+    const text = raw.toLowerCase();
+
+    /* =========================
+       STEP 2: DETECT DISEASE BY KEYWORD
+       ========================= */
+    let disease = "";
+
+    if (text.includes("eczema") || text.includes("atopic dermatitis")) {
+      disease = "eczema";
+    } else if (text.includes("melanoma")) {
+      disease = "melanoma";
+    } else if (text.includes("psoriasis") || text.includes("lichen planus")) {
+      disease = "psoriasis";
+    } else if (text.includes("basal cell carcinoma") || text.includes("bcc")) {
+      disease = "bcc";
+    } else if (text.includes("melanocytic") || text.includes("nevi") || text.includes("nv")) {
+      disease = "nv";
+    } else if (
+      text.includes("benign keratosis") ||
+      text.includes("seborrheic keratoses") ||
+      text.includes("bkl")
+    ) {
+      disease = "bkl";
+    } else if (
+      text.includes("tinea") ||
+      text.includes("ringworm") ||
+      text.includes("candidiasis")
+    ) {
+      disease = "tinea";
+    } else if (
+      text.includes("warts") ||
+      text.includes("molluscum")
+    ) {
+      disease = "warts";
+    } else {
+      disease = "";
+    }
+
+    console.log("Detected disease key:", disease);
+
+    /* =========================
+       STEP 3: REMEDIES DATA
+       ========================= */
+    const remediesData = {
+      eczema: {
+        do: [
+          "Moisturize skin daily with a fragrance-free cream",
+          "Use mild, fragrance-free cleansers",
+          "Pat skin dry and apply moisturizer within 3 minutes",
+          "Wear loose, breathable cotton clothing",
+          "Keep nails trimmed to reduce skin damage",
+          "Use a humidifier in dry environments",
+          "Do short, lukewarm showers",
+          "Spot-test new skincare products"
+        ],
+        avoid: [
+          "Avoid scratching affected areas",
+          "Avoid hot showers or baths",
+          "Avoid harsh soaps and detergents",
+          "Avoid fragranced lotions and alcohol-based products",
+          "Avoid wool or rough fabrics against skin",
+          "Avoid sudden temperature changes",
+          "Avoid over-washing the affected area",
+          "Avoid known personal triggers"
+        ],
+        food: [
+          "Drink plenty of water",
+          "Choose anti-inflammatory foods (leafy greens, berries)",
+          "Include omega-3 sources (fish, flaxseed)",
+          "Limit highly processed foods",
+          "Reduce added sugars",
+          "Track and avoid known food triggers",
+          "Include probiotic foods if tolerated"
+        ]
+      },
+
+      melanoma: {
+        do: [
+          "Use broad-spectrum sunscreen (SPF 30+)",
+          "Wear wide-brim hats and protective clothing",
+          "Seek shade during peak sun hours",
+          "Monitor moles regularly for changes",
+          "Schedule routine skin checkups",
+          "Use sunglasses with UV protection",
+          "Reapply sunscreen every 2 hours outdoors",
+          "Document any new or changing spots"
+        ],
+        avoid: [
+          "Avoid prolonged sun exposure",
+          "Avoid tanning beds",
+          "Avoid sunburns and peeling skin",
+          "Avoid skipping regular skin checks",
+          "Avoid ignoring changing lesions",
+          "Avoid midday outdoor exposure without protection",
+          "Avoid using expired sunscreen"
+        ],
+        food: [
+          "Eat antioxidant-rich fruits and vegetables",
+          "Include omega-3 fatty acids",
+          "Stay well hydrated",
+          "Choose whole grains over refined carbs",
+          "Limit processed meats",
+          "Maintain a balanced diet",
+          "Include vitamin-rich foods"
+        ]
+      },
+
+      psoriasis: {
+        do: [
+          "Keep skin moisturized daily",
+          "Use gentle, fragrance-free skincare",
+          "Manage stress with relaxation techniques",
+          "Get moderate sunlight exposure",
+          "Keep affected skin clean and dry",
+          "Use lukewarm water for bathing",
+          "Follow a consistent skincare routine",
+          "Track flare-up triggers"
+        ],
+        avoid: [
+          "Avoid scratching plaques",
+          "Avoid smoking and alcohol",
+          "Avoid harsh soaps and scrubs",
+          "Avoid very hot baths",
+          "Avoid picking at scales",
+          "Avoid skin injuries when possible",
+          "Avoid known flare triggers",
+          "Avoid tight, irritating clothing"
+        ],
+        food: [
+          "Eat omega-3 rich foods",
+          "Include fruits and vegetables daily",
+          "Limit processed foods",
+          "Reduce added sugars",
+          "Choose lean proteins",
+          "Stay hydrated",
+          "Limit high-salt foods"
+        ]
+      },
+
+      bcc: {
+        do: [
+          "Protect skin from sun exposure",
+          "Use broad-spectrum sunscreen daily",
+          "Wear protective clothing and hats",
+          "Schedule regular skin exams",
+          "Monitor skin for new or changing spots",
+          "Seek shade during peak UV hours",
+          "Use UV-protective sunglasses",
+          "Keep a record of skin changes"
+        ],
+        avoid: [
+          "Avoid prolonged UV exposure",
+          "Avoid tanning beds",
+          "Avoid delaying medical evaluation",
+          "Avoid sunburns",
+          "Avoid outdoor exposure without protection",
+          "Avoid skipping follow-up visits",
+          "Avoid picking at lesions"
+        ],
+        food: [
+          "Maintain a balanced diet",
+          "Eat antioxidant-rich foods",
+          "Include omega-3 sources",
+          "Stay well hydrated",
+          "Limit processed foods",
+          "Choose whole grains",
+          "Include vitamin-rich vegetables"
+        ]
+      },
+
+      nv: {
+        do: [
+          "Monitor moles for size or color changes",
+          "Use sunscreen daily",
+          "Perform monthly skin self-checks",
+          "Wear protective clothing outdoors",
+          "Photograph moles to track changes",
+          "See a clinician for concerning changes",
+          "Keep skin hydrated",
+          "Use sun-safe habits year-round"
+        ],
+        avoid: [
+          "Avoid excessive sun exposure",
+          "Avoid tanning beds",
+          "Avoid picking or scratching moles",
+          "Avoid sunburns",
+          "Avoid ignoring changing moles",
+          "Avoid harsh skin products on moles",
+          "Avoid unprotected peak-hour sun"
+        ],
+        food: [
+          "Eat vitamin-rich foods",
+          "Include antioxidants in meals",
+          "Stay hydrated",
+          "Limit processed snacks",
+          "Choose lean proteins",
+          "Include healthy fats",
+          "Eat a balanced diet"
+        ]
+      },
+
+      bkl: {
+        do: [
+          "Maintain good skin hygiene",
+          "Use gentle cleansers",
+          "Moisturize regularly",
+          "Monitor lesions for changes",
+          "Use sun protection",
+          "Consult a dermatologist if lesions change",
+          "Avoid friction on affected areas",
+          "Keep skin dry after sweating"
+        ],
+        avoid: [
+          "Avoid scratching lesions",
+          "Avoid self-treatment or picking",
+          "Avoid harsh exfoliants",
+          "Avoid strong acids without guidance",
+          "Avoid tight clothing that rubs",
+          "Avoid excessive sun exposure",
+          "Avoid irritating skincare products"
+        ],
+        food: [
+          "Eat a balanced diet",
+          "Stay hydrated",
+          "Include antioxidant-rich foods",
+          "Limit processed foods",
+          "Reduce added sugars",
+          "Include healthy fats",
+          "Eat fiber-rich foods"
+        ]
+      },
+
+      tinea: {
+        do: [
+          "Keep affected area clean and dry",
+          "Change socks and underwear daily",
+          "Wash clothes and towels regularly",
+          "Use breathable fabrics",
+          "Air out shoes",
+          "Shower after sweating",
+          "Keep nails trimmed",
+          "Maintain good hygiene"
+        ],
+        avoid: [
+          "Avoid sharing personal items",
+          "Avoid damp clothing for long periods",
+          "Avoid tight, non-breathable fabrics",
+          "Avoid scratching the rash",
+          "Avoid walking barefoot in public areas",
+          "Avoid reusing unwashed towels",
+          "Avoid applying heavy oils to the area"
+        ],
+        food: [
+          "Reduce added sugars",
+          "Eat a balanced diet",
+          "Include probiotic foods if tolerated",
+          "Stay hydrated",
+          "Include vitamin-rich foods",
+          "Limit highly processed foods",
+          "Support immune health with whole foods"
+        ]
+      },
+
+      warts: {
+        do: [
+          "Keep skin clean",
+          "Cover warts to prevent spread",
+          "Wash hands after touching warts",
+          "Keep the area dry",
+          "Use separate towels for the area",
+          "Monitor for changes",
+          "Seek clinical advice if spreading",
+          "Maintain good hygiene"
+        ],
+        avoid: [
+          "Avoid scratching or picking warts",
+          "Avoid sharing towels or razors",
+          "Avoid biting nails or cuticles",
+          "Avoid shaving over warts",
+          "Avoid walking barefoot in public showers",
+          "Avoid touching other skin after contact",
+          "Avoid tight, irritating footwear"
+        ],
+        food: [
+          "Eat immune-supporting foods",
+          "Include fruits and vegetables daily",
+          "Stay hydrated",
+          "Limit sugary snacks",
+          "Choose whole grains",
+          "Include lean proteins",
+          "Maintain a balanced diet"
+        ]
+      }
+    };
+
+    const defaultRemedies = {
+      do: [
+        "Keep the affected area clean",
+        "Use gentle, fragrance-free products",
+        "Moisturize regularly",
+        "Wear breathable fabrics",
+        "Track changes over time",
+        "Maintain good hygiene",
+        "Protect skin from excessive sun",
+        "Stay hydrated"
+      ],
+      avoid: [
+        "Avoid scratching or picking",
+        "Avoid harsh soaps or exfoliants",
+        "Avoid very hot showers",
+        "Avoid tight or irritating clothing",
+        "Avoid known personal triggers",
+        "Avoid excessive sun exposure",
+        "Avoid sharing personal items",
+        "Avoid self-treating suspicious lesions"
+      ],
+      food: [
+        "Eat a balanced diet",
+        "Include fruits and vegetables",
+        "Choose whole grains",
+        "Include healthy fats",
+        "Limit processed foods",
+        "Reduce added sugars",
+        "Stay well hydrated",
+        "Limit excessive alcohol"
+      ]
+    };
+
+    /* =========================
+       STEP 4: RENDER UI
+       ========================= */
+    const renderList = (id, items) => {
+      const ul = document.getElementById(id);
+      ul.innerHTML = "";
+      items.forEach(item => {
+        const li = document.createElement("li");
+        li.textContent = item;
+        ul.appendChild(li);
+      });
+    };
+
+    if (remediesData[disease]) {
+      renderList("do-list", remediesData[disease].do);
+      renderList("avoid-list", remediesData[disease].avoid);
+      renderList("food-list", remediesData[disease].food);
+    } else {
+      renderList("do-list", defaultRemedies.do);
+      renderList("avoid-list", defaultRemedies.avoid);
+      renderList("food-list", defaultRemedies.food);
+    }
+
+    const badge = document.getElementById("detected-disease");
+    if (badge && disease) {
+      badge.textContent = `Detected Condition: ${disease.toUpperCase()}`;
+    }
+
+    const heading = document.getElementById("remedy-disease");
+    if (heading && disease) {
+      heading.textContent = disease.toUpperCase();
+    }
+  </script>
+
+
+
+<section class="doubts-wrapper" id="doubtsSection">
+  <div class="doubt-card">
+    <h2>What does SkinCare AI do?</h2>
+    <p>
+      SkinCare AI uses Artificial Intelligence to analyze skin images and detect possible
+      skin conditions. It supports early awareness and better skin health decisions.
+    </p>
+  </div>
+
+  <div class="doubt-card">
+    <h2>How does it work?</h2>
+    <ul>
+      <li>Upload a clear image of the affected skin area</li>
+      <li>AI processes the image and detects the disease</li>
+      <li>Get insights and recommended remedies</li>
+    </ul>
+  </div>
+
+  <div class="doubt-card">
+    <h2>Why use SkinCare AI?</h2>
+    <ul>
+      <li>Quick and easy skin disease detection</li>
+      <li>Simple and user-friendly interface</li>
+      <li>Helps in early awareness and care</li>
+    </ul>
+  </div>
+</section>
+
+<script src="js/script.js"></script>
+<script>
+  if (localStorage.getItem("darkMode") === "enabled") {
+    document.body.classList.add("dark");
+  }
+</script>
+
+  <script src="js/chatbot.js"></script>
+</body>
+</html>

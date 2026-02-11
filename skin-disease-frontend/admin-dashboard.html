@@ -1,0 +1,22 @@
+<h2>Doctor Dashboard</h2>
+<div id="list"></div>
+
+<script src="js/appState.js"></script>
+<script>
+const list = document.getElementById("list");
+
+AppState.appointments.forEach((a, i) => {
+  const div = document.createElement("div");
+  div.innerHTML = `
+    ${a.patient} → ${a.doctor} → ${a.date}
+    <button onclick="approve(${i})">Approve</button>
+  `;
+  list.appendChild(div);
+});
+
+function approve(i) {
+  AppState.appointments[i].status = "Approved";
+  saveAppointments();
+  alert("Approved");
+}
+</script>

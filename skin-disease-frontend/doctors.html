@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Doctors | SkinCare AI</title>
+  <link rel="icon" type="image/svg+xml" href="assets/logo.svg">
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/chatbot.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand"><img class="brand-logo" src="assets/logo.svg" alt="SkinCare AI logo"><span>SkinCare AI</span></div>
+  <nav class="nav-links">
+    <a href="home.html">Home</a>
+    <a href="upload.html">Upload</a>
+    <a href="consultation.html">Consultation</a>
+    <a href="#" id="doubtsNavBtn">Doubts</a>
+    <a href="profile.html">Profile</a>
+    <a href="settings.html">Settings</a>
+    <a href="index.html" data-logout>Logout</a>
+  </nav>
+</header>
+
+<main style="padding:40px;">
+  <div class="dash-card" style="margin-bottom:20px;">
+    <h2>Clinics and Doctors</h2>
+    <p class="muted" id="selectedHospital">Selected Hospital: -</p>
+  </div>
+
+  <div class="dash-card">
+    <div style="display:flex; flex-direction:column; gap:16px;">
+      <div style="padding:16px; border:1px solid #e2e8f0; border-radius:12px; background:#f8fbff; cursor:pointer;" onclick="selectDoctor('Kamineni Hospitals (Vijayawada Unit)')">
+        <h3 style="margin-bottom:6px;">Kamineni Hospitals (Vijayawada Unit)</h3>
+        <p style="margin:0 0 6px; color:#475569;">Specialty: Multispecialty, Skin & Allergy</p>
+        <p style="margin:0; color:#475569;">Phone: <a href="tel:+918666603333">+91 866 660 3333</a></p>
+        <p style="margin:6px 0 0; color:#475569;">Address: Near Autonagar, Vijayawada (10 mins from Benz Circle)</p>
+      </div>
+
+      <div style="padding:16px; border:1px solid #e2e8f0; border-radius:12px; background:#f8fbff; cursor:pointer;" onclick="selectDoctor('Dr. Rao\'s Skin & Hair Clinic')">
+        <h3 style="margin-bottom:6px;">Dr. Rao's Skin & Hair Clinic</h3>
+        <p style="margin:0 0 6px; color:#475569;">Specialty: Dermatology, Acne, Hair Loss</p>
+        <p style="margin:0; color:#475569;">Phone: <a href="tel:+919876543210">+91 98765 43210</a></p>
+        <p style="margin:6px 0 0; color:#475569;">Address: Benz Circle, Opp. DV Manor Hotel, Vijayawada</p>
+      </div>
+
+      <div style="padding:16px; border:1px solid #e2e8f0; border-radius:12px; background:#f8fbff; cursor:pointer;" onclick="selectDoctor('Glow Skin Clinic')">
+        <h3 style="margin-bottom:6px;">Glow Skin Clinic</h3>
+        <p style="margin:0 0 6px; color:#475569;">Specialty: Cosmetic Dermatology, Laser Treatment</p>
+        <p style="margin:0; color:#475569;">Phone: <a href="tel:+919988766554">+91 99887 66554</a></p>
+        <p style="margin:6px 0 0; color:#475569;">Address: Near Benz Circle, Patamata, Vijayawada</p>
+      </div>
+
+      <div style="padding:16px; border:1px solid #e2e8f0; border-radius:12px; background:#f8fbff; cursor:pointer;" onclick="selectDoctor('ClearSkin Dermatology Center')">
+        <h3 style="margin-bottom:6px;">ClearSkin Dermatology Center</h3>
+        <p style="margin:0 0 6px; color:#475569;">Specialty: Skin Allergy, Eczema, Psoriasis</p>
+        <p style="margin:0; color:#475569;">Phone: <a href="tel:+919666677889">+91 96666 77889</a></p>
+        <p style="margin:6px 0 0; color:#475569;">Address: Ring Road, Benz Circle, Vijayawada</p>
+      </div>
+
+      <div style="padding:16px; border:1px solid #e2e8f0; border-radius:12px; background:#f8fbff; cursor:pointer;" onclick="selectDoctor('Skin First Clinic')">
+        <h3 style="margin-bottom:6px;">Skin First Clinic</h3>
+        <p style="margin:0 0 6px; color:#475569;">Specialty: Clinical Dermatology, Pediatric Skin Care</p>
+        <p style="margin:0; color:#475569;">Phone: <a href="tel:+919555544332">+91 95555 44332</a></p>
+        <p style="margin:6px 0 0; color:#475569;">Address: Beside Benz Circle Metro Mall, Vijayawada</p>
+      </div>
+
+      <div style="padding:16px; border:1px solid #e2e8f0; border-radius:12px; background:#f8fbff; cursor:pointer;" onclick="selectDoctor('Aura Skin & Cosmetology')">
+        <h3 style="margin-bottom:6px;">Aura Skin & Cosmetology</h3>
+        <p style="margin:0 0 6px; color:#475569;">Specialty: Advanced Skin Treatments, Aesthetic Care</p>
+        <p style="margin:0; color:#475569;">Phone: <a href="tel:+919444422110">+91 94444 22110</a></p>
+        <p style="margin:6px 0 0; color:#475569;">Address: Near Benz Circle Flyover, Vijayawada</p>
+      </div>
+
+      <div style="padding:16px; border:1px solid #e2e8f0; border-radius:12px; background:#f8fbff; cursor:pointer;" onclick="selectDoctor('Dermacare Speciality Clinic')">
+        <h3 style="margin-bottom:6px;">Dermacare Speciality Clinic</h3>
+        <p style="margin:0 0 6px; color:#475569;">Specialty: Chronic Skin Diseases, Vitiligo</p>
+        <p style="margin:0; color:#475569;">Phone: <a href="tel:+919777766554">+91 97777 66554</a></p>
+        <p style="margin:6px 0 0; color:#475569;">Address: Patamata Main Road, Benz Circle, Vijayawada</p>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script>
+  const selected = localStorage.getItem("selectedHospital");
+  const selectedEl = document.getElementById("selectedHospital");
+  if (selected) {
+    selectedEl.textContent = `Selected Hospital: ${selected}`;
+  }
+
+  function selectDoctor(name) {
+    localStorage.setItem("selectedDoctor", name);
+    window.location.href = "appointment.html";
+  }
+</script>
+
+
+
+<section class="doubts-wrapper" id="doubtsSection">
+  <div class="doubt-card">
+    <h2>What does SkinCare AI do?</h2>
+    <p>
+      SkinCare AI uses Artificial Intelligence to analyze skin images and detect possible
+      skin conditions. It supports early awareness and better skin health decisions.
+    </p>
+  </div>
+
+  <div class="doubt-card">
+    <h2>How does it work?</h2>
+    <ul>
+      <li>Upload a clear image of the affected skin area</li>
+      <li>AI processes the image and detects the disease</li>
+      <li>Get insights and recommended remedies</li>
+    </ul>
+  </div>
+
+  <div class="doubt-card">
+    <h2>Why use SkinCare AI?</h2>
+    <ul>
+      <li>Quick and easy skin disease detection</li>
+      <li>Simple and user-friendly interface</li>
+      <li>Helps in early awareness and care</li>
+    </ul>
+  </div>
+</section>
+
+<script src="js/script.js"></script>
+<script>
+  if (localStorage.getItem("darkMode") === "enabled") {
+    document.body.classList.add("dark");
+  }
+</script>
+
+  <script src="js/chatbot.js"></script>
+</body>
+</html>

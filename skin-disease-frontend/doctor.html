@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Doctor Appointment</title>
+  <link rel="icon" type="image/svg+xml" href="assets/logo.svg">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+/* ===== Top Navbar ===== */
+.top-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 64px;
+
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(8px);
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 0 28px;
+  z-index: 1000;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+}
+
+.logo {
+  font-size: 20px;
+  font-weight: 700;
+  color: #2563eb;
+}
+
+.nav-right a {
+  margin-left: 18px;
+  text-decoration: none;
+  font-weight: 600;
+  color: #1f2937;
+  transition: color 0.2s;
+}
+
+.nav-right a:hover {
+  color: #2563eb;
+}
+
+.nav-right .active {
+  color: #2563eb;
+}
+
+.nav-right .logout {
+  color: #dc2626;
+}
+
+/* Back button */
+.back-to-consultation {
+  position: fixed;
+  top: 76px;
+  left: 28px;
+  z-index: 900;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: #eff6ff;
+  color: #1d4ed8;
+  border: 1px solid #c7dcff;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 14px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.back-to-consultation:hover {
+  transform: translateY(-1px);
+  background: #e0edff;
+  box-shadow: 0 10px 22px rgba(37, 99, 235, 0.2);
+}
+
+@media (max-width: 600px) {
+  .back-to-consultation {
+    top: 72px;
+    left: 16px;
+    padding: 7px 12px;
+    font-size: 13px;
+  }
+}
+
+/* Page background */
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+
+  background-image: url("images/whatever.jpg");
+  background-size: cover;          /* FULL SCREEN */
+  background-position: center;
+  background-repeat: no-repeat;
+
+  min-height: 100vh;
+}
+
+/* Center wrapper */
+.page-wrapper {
+  min-height: calc(100vh - 64px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 64px;
+}
+
+/* Card */
+.appointment-card {
+  background: white;
+  width: 520px;
+  padding: 36px;
+  border-radius: 20px;
+
+  box-shadow: 0 30px 60px rgba(0,0,0,0.25);
+}
+
+/* Doctor header */
+.doctor-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: #2563eb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  color: white;
+}
+
+.doctor-header h2 {
+  margin: 0;
+}
+.doctor-header p {
+  margin: 4px 0 0;
+  color: #64748b;
+}
+
+/* Form */
+.form-group {
+  margin-bottom: 16px;
+}
+
+label {
+  font-weight: 600;
+  display: block;
+  margin-bottom: 6px;
+}
+
+input, select {
+  width: 100%;
+  padding: 14px;
+  border-radius: 12px;
+  border: 1px solid #cbd5e1;
+  font-size: 16px;
+}
+
+input:focus, select:focus {
+  outline: none;
+  border-color: #2563eb;
+}
+
+/* Button */
+.confirm-btn {
+  width: 100%;
+  margin-top: 16px;
+  padding: 16px;
+  border-radius: 14px;
+
+  font-size: 17px;
+  font-weight: 600;
+
+  background: linear-gradient(135deg, #2563eb, #1e40af);
+  color: white;
+  cursor: pointer;
+
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.confirm-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 25px rgba(37,99,235,0.35);
+}
+
+/* Success message */
+.success-box {
+  margin-top: 16px;
+  display: none;
+  padding: 12px;
+  background: #dcfce7;
+  color: #166534;
+  border-radius: 10px;
+  font-weight: 600;
+  animation: fadeIn 0.4s ease;
+}
+
+/* Animations */
+@keyframes slideUp {
+  from { transform: translateY(30px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.fade-in {
+  animation: fadeIn 0.8s ease;
+}
+</style>
+  <link rel="stylesheet" href="css/chatbot.css">
+</head>
+<body>
+
+  <!-- Top Navigation Bar -->
+  <nav class="top-nav">
+    <div class="nav-left">
+      <span class="logo"><img class="brand-logo" src="assets/logo.svg" alt="SkinCare AI logo"><span>SkinCare AI</span></span>
+    </div>
+
+    <div class="nav-right">
+      <a href="home.html">Home</a>
+      <a href="upload.html">Upload</a>
+      <a href="consultation.html" class="active">Consultation</a>
+      <a href="doubts.html">Doubts</a>
+      <a href="profile.html">Profile</a>
+      <a href="settings.html">Settings</a>
+      <a href="#" class="logout" onclick="logoutUser()">Logout</a>
+    </div>
+  </nav>
+
+  <a class="back-to-consultation" href="consultation.html">← Back to Consultation</a>
+
+  <div class="page-wrapper">
+    <div class="appointment-card fade-in">
+
+      <!-- Doctor Header -->
+      <div class="doctor-header">
+        <div class="avatar">👨‍⚕️</div>
+        <div>
+          <h2 id="doctorName">Dr. Rajesh</h2>
+          <p id="doctorSpec">Dermatologist</p>
+        </div>
+      </div>
+
+      <!-- Form -->
+      <div class="form-group">
+        <label>Select Date</label>
+        <input type="date" id="date">
+      </div>
+
+      <div class="form-group">
+        <label>Select Time</label>
+        <select id="time">
+          <option value="">Select Time</option>
+          <option>10:00 AM</option>
+          <option>11:00 AM</option>
+          <option>04:00 PM</option>
+        </select>
+      </div>
+
+      <button class="confirm-btn" onclick="confirm()">
+        Confirm Appointment
+      </button>
+
+      <div id="msg" class="success-box"></div>
+
+    </div>
+  </div>
+
+  <script>
+  const params = new URLSearchParams(window.location.search);
+
+  const doctorFromUrl = params.get("doctor");
+  const specFromUrl = params.get("spec");
+
+  console.log("URL doctor:", doctorFromUrl);
+  console.log("URL spec:", specFromUrl);
+
+  if (doctorFromUrl) {
+    document.getElementById("doctorName").innerText = doctorFromUrl;
+  }
+
+  if (specFromUrl) {
+    document.getElementById("doctorSpec").innerText = specFromUrl;
+  }
+
+  function confirm() {
+    const date = document.getElementById("date").value;
+    const time = document.getElementById("time").value;
+
+    if (!date || !time) {
+      alert("Please select date and time");
+      return;
+    }
+
+    const msg = document.getElementById("msg");
+    msg.style.display = "block";
+    msg.innerText = "✅ Appointment booked successfully!";
+  }
+  </script>
+
+  <script>
+  function logoutUser() {
+    // clear any saved login/session data
+    localStorage.removeItem("loggedInUser");
+    localStorage.removeItem("token");
+    sessionStorage.clear();
+
+    // redirect to login page
+    window.location.href = "login.html";
+  }
+  </script>
+
+<script>
+  if (localStorage.getItem("darkMode") === "enabled") {
+    document.body.classList.add("dark");
+  }
+</script>
+
+  <script src="js/chatbot.js"></script>
+</body>
+</html>

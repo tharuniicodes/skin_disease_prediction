@@ -1,0 +1,22 @@
+<h2>Book Appointment</h2>
+
+<select id="date">
+  <option>10 Feb</option>
+  <option>11 Feb</option>
+</select>
+
+<button onclick="book()">Confirm</button>
+
+<script src="js/appState.js"></script>
+<script>
+function book() {
+  AppState.appointments.push({
+    patient: AppState.user?.email,
+    doctor: localStorage.getItem("selectedDoctor"),
+    date: document.getElementById("date").value,
+    status: "Pending"
+  });
+  saveAppointments();
+  alert("Appointment sent");
+}
+</script>
