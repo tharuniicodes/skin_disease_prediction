@@ -16,3 +16,6 @@ Place the files inside the following project directories:
 - `features/`
 
 Ensure the folder structure matches the project layout before running training or inference scripts.
+
+kaggle link
+https://www.kaggle.com/datasets/ismailpromus/skin-diseases-image-dataset
