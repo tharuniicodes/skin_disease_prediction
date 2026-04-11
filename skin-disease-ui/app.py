@@ -129,6 +129,42 @@ def login():
     }), 200
 
 
+@app.route("/forgot-password", methods=["POST"])
+def forgot_password():
+    data = request.json
+    email = data.get("email")
+
+    if not email:
+        return jsonify({"success": False, "message": "Email is required"}), 400
+
+    user = users_collection.find_one({"email": email})
+    if not user:
+        return jsonify({"success": False, "message": "Email not registered"}), 404
+
+    return jsonify({"success": True, "message": "Email verified"}), 200
+
+
+@app.route("/reset-password", methods=["POST"])
+def reset_password():
+    data = request.json
+    email = data.get("email")
+    new_password = data.get("password")
+
+    if not email or not new_password:
+        return jsonify({"success": False, "message": "Email and new password are required"}), 400
+
+    hashed_password = generate_password_hash(new_password)
+    result = users_collection.update_one(
+        {"email": email},
+        {"$set": {"password": hashed_password}}
+    )
+
+    if result.modified_count == 0:
+        return jsonify({"success": False, "message": "Failed to update password"}), 500
+
+    return jsonify({"success": True, "message": "Password updated successfully"}), 200
+
+
 @app.route("/health")
 def health():
     return {

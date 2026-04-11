@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>Login | SkinCare AI</title>
@@ -8,120 +9,179 @@
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/chatbot.css">
 </head>
+
 <body class="login-page">
 
-<header class="page-topbar">
-  <div class="nav-left">
-    <img class="brand-logo" src="assets/logo.svg" alt="SkinCare AI logo">
-    <span class="brand-name">SkinCare AI</span>
-  </div>
-      <div class="nav-actions">
-    <a class="nav-btn" href="home.html">Home</a>
-    <a class="nav-btn" href="upload.html">Upload</a>
-    <a class="nav-btn" href="consultation.html">Consultation</a>
-    <a class="nav-btn" href="#" id="doubtsNavBtn">Doubts</a>
-    <a class="nav-btn" href="profile.html">Profile</a>
-    <a class="nav-btn" href="settings.html">Settings</a>
-    <a class="nav-btn" href="index.html" data-logout>Logout</a>
-  </div>
-</header>
-
-
-<header class="login-nav">
-  <div class="login-brand"><img class="brand-logo" src="assets/logo.svg" alt="SkinCare AI logo"><span>SkinCare AI</span></div>
-  <nav class="login-links" aria-label="Primary">
-    <a href="home.html">Home</a>
-    <a href="upload.html">Upload</a>
-    <a href="doubts.html">Doubts</a>
-    <a href="profile.html">Profile</a>
-    <a href="settings.html">Settings</a>
-  </nav>
-</header>
-
-<main class="login-main split">
-  <section class="login-shell" aria-label="Login Split">
-    <div class="login-left" aria-label="Intro">
-      <div class="login-left-content">
-        <h1>Skin Disease Predictor</h1>
-        <p>Smart, AI-powered skin condition screening for early awareness.</p>
-      </div>
-      <div class="login-left-image">
-        <img src="images/pic.jpg" alt="Healthcare professional">
-      </div>
+  <header class="page-topbar">
+    <div class="nav-left">
+      <img class="brand-logo" src="assets/logo.svg" alt="SkinCare AI logo">
+      <span class="brand-name">SkinCare AI</span>
     </div>
-
-    <div class="login-right" aria-label="Login">
-      <div class="login-card">
-        <header class="login-header">
-          <h1>Welcome Back</h1>
-          <p>AI-powered skin disease detection</p>
-        </header>
-
-        <form class="login-form" onsubmit="event.preventDefault(); login();">
-          <label class="input-group">
-            <span class="input-icon" aria-hidden="true">👤</span>
-            <input type="text" id="loginUsername" placeholder="Username" required>
-          </label>
-
-          <label class="input-group">
-            <span class="input-icon" aria-hidden="true">✉️</span>
-            <input type="email" id="loginEmail" placeholder="Email" required>
-          </label>
-
-          <label class="input-group">
-            <span class="input-icon" aria-hidden="true">🔒</span>
-            <input type="password" id="loginPassword" placeholder="Password" required>
-          </label>
-
-          <button type="submit" class="login-btn">Login</button>
-
-          <p class="login-footer">
-            New user?
-            <a href="signup.html">Create account</a>
-          </p>
-        </form>
-      </div>
+    <div class="nav-actions">
+      <a class="nav-btn" href="home.html">Home</a>
+      <a class="nav-btn" href="upload.html">Upload</a>
+      <a class="nav-btn" href="consultation.html">Consultation</a>
+      <a class="nav-btn" href="#" id="doubtsNavBtn">About</a>
+      <a class="nav-btn" href="profile.html">Profile</a>
+      <a class="nav-btn" href="settings.html">Settings</a>
+      <a class="nav-btn" href="index.html" data-logout>Logout</a>
     </div>
-  </section>
-</main>
+  </header>
 
-<script src="js/script.js"></script>
+
+  <header class="login-nav">
+    <div class="login-brand"><img class="brand-logo" src="assets/logo.svg" alt="SkinCare AI logo"><span>SkinCare
+        AI</span></div>
+    <nav class="login-links" aria-label="Primary">
+      <a href="home.html">Home</a>
+      <a href="upload.html">Upload</a>
+      <a href="doubts.html">About</a>
+      <a href="profile.html">Profile</a>
+      <a href="settings.html">Settings</a>
+    </nav>
+  </header>
+
+  <main class="login-main split">
+    <section class="login-shell" aria-label="Login Split">
+      <div class="login-left" aria-label="Intro">
+        <div class="login-left-content">
+          <h1>Skin Disease Predictor</h1>
+          <p>Smart, AI-powered skin condition screening for early awareness.</p>
+        </div>
+        <div class="login-left-image">
+          <img src="images/pic.jpg" alt="Healthcare professional">
+        </div>
+      </div>
+
+      <div class="login-right" aria-label="Login">
+        <div class="login-card">
+          <header class="login-header">
+            <h1>Welcome Back</h1>
+            <p>AI-powered skin disease detection</p>
+          </header>
+
+          <form class="login-form" onsubmit="event.preventDefault(); login();">
+            <label class="input-group">
+              <span class="input-icon" aria-hidden="true">👤</span>
+              <input type="text" id="loginUsername" placeholder="Username" required>
+            </label>
+
+            <label class="input-group">
+              <span class="input-icon" aria-hidden="true">✉️</span>
+              <input type="email" id="loginEmail" placeholder="Email" required>
+            </label>
+
+            <label class="input-group">
+              <span class="input-icon" aria-hidden="true">🔒</span>
+              <input type="password" id="loginPassword" placeholder="Password" required>
+            </label>
+
+            <button type="submit" class="login-btn">Login</button>
+
+            <div class="login-meta">
+              <a href="#" onclick="event.preventDefault(); showForgotPassword();" class="forgot-link">Forgot
+                Password?</a>
+            </div>
+
+            <p class="login-footer">
+              New user?
+              <a href="signup.html">Create account</a>
+            </p>
+          </form>
+
+          <form class="forgot-form" id="forgotForm" style="display: none;"
+            onsubmit="event.preventDefault(); handleForgotPassword();">
+            <header class="login-header">
+              <h1>Forgot Password</h1>
+              <p>Enter your email to verify your account</p>
+            </header>
+            <label class="input-group">
+              <span class="input-icon" aria-hidden="true">✉️</span>
+              <input type="email" id="forgotEmail" placeholder="Registered Email" required>
+            </label>
+            <button type="submit" class="login-btn">Verify Email</button>
+            <p class="login-footer">
+              <a href="#" onclick="event.preventDefault(); backToLogin();">Back to Login</a>
+            </p>
+          </form>
+
+          <form class="reset-form" id="resetForm" style="display: none;"
+            onsubmit="event.preventDefault(); handleResetPassword();">
+            <header class="login-header">
+              <h1>Reset Password</h1>
+              <p>Enter your new password below</p>
+            </header>
+            <label class="input-group">
+              <span class="input-icon" aria-hidden="true">🔒</span>
+              <input type="password" id="newPassword" placeholder="New Password" required>
+            </label>
+            <label class="input-group">
+              <span class="input-icon" aria-hidden="true">🔒</span>
+              <input type="password" id="confirmPassword" placeholder="Confirm Password" required>
+            </label>
+            <button type="submit" class="login-btn">Update Password</button>
+            <p class="login-footer">
+              <a href="#" onclick="event.preventDefault(); backToLogin();">Back to Login</a>
+            </p>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="js/script.js"></script>
   <script src="js/theme.js"></script>
 
 
-<section class="doubts-wrapper" id="doubtsSection">
-  <div class="doubt-card">
-    <h2>What does SkinCare AI do?</h2>
-    <p>
-      SkinCare AI uses Artificial Intelligence to analyze skin images and detect possible
-      skin conditions. It supports early awareness and better skin health decisions.
-    </p>
-  </div>
+  <section class="doubts-wrapper about-extended" id="doubtsSection">
+    <div class="doubts-cards">
+      <div class="doubt-card">
+        <h2>What does SkinCare AI do?</h2>
+        <ul>
+          <li>Analyzes uploaded skin images using advanced AI and deep learning.</li>
+          <li>Detects multiple common skin conditions with confidence guidance.</li>
+          <li>Supports early risk awareness for timely medical decisions.</li>
+          <li>Generates personalized insights based on user health inputs.</li>
+          <li>Provides recommended care steps and safety precautions.</li>
+          <li>Offers educational summaries of symptoms and conditions.</li>
+          <li>Helps track skin health patterns over time.</li>
+        </ul>
+      </div>
 
-  <div class="doubt-card">
-    <h2>How does it work?</h2>
-    <ul>
-      <li>Upload a clear image of the affected skin area</li>
-      <li>AI processes the image and detects the disease</li>
-      <li>Get insights and recommended remedies</li>
-    </ul>
-  </div>
+      <div class="doubt-card">
+        <h2>How does it work?</h2>
+        <ul>
+          <li>Upload a clear, well-lit image of the affected area.</li>
+          <li>The AI model processes the image and extracts visual features.</li>
+          <li>Patterns are compared against trained disease categories.</li>
+          <li>The system predicts the most likely condition with confidence.</li>
+          <li>Insights, remedies, and precautions are generated for guidance.</li>
+          <li>Consultation prompts appear when follow-up is recommended.</li>
+          <li>Privacy-focused processing limits data use to analysis.</li>
+        </ul>
+      </div>
 
-  <div class="doubt-card">
-    <h2>Why use SkinCare AI?</h2>
-    <ul>
-      <li>Quick and easy skin disease detection</li>
-      <li>Simple and user-friendly interface</li>
-      <li>Helps in early awareness and care</li>
-    </ul>
-  </div>
-</section>
-<script>
-  if (localStorage.getItem("darkMode") === "enabled") {
-    document.body.classList.add("dark");
-  }
-</script>
+      <div class="doubt-card">
+        <h2>Why use SkinCare AI?</h2>
+        <ul>
+          <li>Accessible AI-powered screening from any location.</li>
+          <li>Saves time before an in-person consultation.</li>
+          <li>Supports early detection and preventive care decisions.</li>
+          <li>Clear, user-friendly workflow for all users.</li>
+          <li>Confidence-based insights improve decision quality.</li>
+          <li>Educational guidance improves health literacy.</li>
+          <li>Encourages professional care when needed.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+  <script>
+    if (localStorage.getItem("darkMode") === "enabled") {
+      document.body.classList.add("dark");
+    }
+  </script>
 
   <script src="js/chatbot.js"></script>
 </body>
+
 </html>

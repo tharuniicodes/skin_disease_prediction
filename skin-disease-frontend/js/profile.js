@@ -4,6 +4,26 @@ function clearHistory() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+  const storedUser =
+    JSON.parse(localStorage.getItem("user") || "null") ||
+    JSON.parse(localStorage.getItem("loggedInUser") || "null") ||
+    null;
+
+  const profileName = document.getElementById("profileName");
+  const profileEmail = document.getElementById("profileEmail");
+  if (profileName) {
+    profileName.textContent =
+      (storedUser && (storedUser.username || storedUser.name)) ||
+      localStorage.getItem("loggedInUser") ||
+      profileName.textContent;
+  }
+  if (profileEmail) {
+    profileEmail.textContent =
+      (storedUser && storedUser.email) ||
+      localStorage.getItem("loggedInEmail") ||
+      profileEmail.textContent;
+  }
+
   const prefsRaw = localStorage.getItem("healthPrefs");
   if (!prefsRaw) return;
 

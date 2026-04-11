@@ -59,6 +59,90 @@ function signup() {
     });
 }
 
+function showForgotPassword() {
+  const loginForm = document.querySelector(".login-form");
+  const forgotForm = document.getElementById("forgotForm");
+  const resetForm = document.getElementById("resetForm");
+
+  if (loginForm) loginForm.style.display = "none";
+  if (resetForm) resetForm.style.display = "none";
+  if (forgotForm) forgotForm.style.display = "block";
+}
+
+function backToLogin() {
+  const loginForm = document.querySelector(".login-form");
+  const forgotForm = document.getElementById("forgotForm");
+  const resetForm = document.getElementById("resetForm");
+
+  if (forgotForm) forgotForm.style.display = "none";
+  if (resetForm) resetForm.style.display = "none";
+  if (loginForm) loginForm.style.display = "block";
+}
+
+function handleForgotPassword() {
+  const emailInput = document.getElementById("forgotEmail");
+  const email = emailInput.value;
+
+  fetch("/forgot-password", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email })
+  })
+    .then(res => res.json())
+    .then(data => {
+      if (data.success) {
+        showResetPassword();
+      } else {
+        alert(data.message || "Error verifying email");
+      }
+    })
+    .catch(() => {
+      alert("Something went wrong. Please try again.");
+    });
+}
+
+function showResetPassword() {
+  const loginForm = document.querySelector(".login-form");
+  const forgotForm = document.getElementById("forgotForm");
+  const resetForm = document.getElementById("resetForm");
+
+  if (loginForm) loginForm.style.display = "none";
+  if (forgotForm) forgotForm.style.display = "none";
+  if (resetForm) resetForm.style.display = "block";
+}
+
+function handleResetPassword() {
+  const email = document.getElementById("forgotEmail").value;
+  const passwordInput = document.getElementById("newPassword");
+  const confirmInput = document.getElementById("confirmPassword");
+
+  if (passwordInput.value !== confirmInput.value) {
+    alert("Passwords do not match!");
+    return;
+  }
+
+  fetch("/reset-password", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      email: email,
+      password: passwordInput.value
+    })
+  })
+    .then(res => res.json())
+    .then(data => {
+      if (data.success) {
+        alert("Password updated successfully! Please login with your new password.");
+        backToLogin();
+      } else {
+        alert(data.message || "Failed to update password");
+      }
+    })
+    .catch(() => {
+      alert("Something went wrong. Please try again.");
+    });
+}
+
 function upload() {
   window.location.href = "upload.html";
 }
@@ -476,7 +560,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const toggleDoubts = (e) => {
     if (e) e.preventDefault();
-    doubtsSection.classList.toggle("show");
+    if (doubtsSection) doubtsSection.classList.toggle("show");
   };
 
   if (doubtsBtn && doubtsSection) {
@@ -501,13 +585,14 @@ document.addEventListener("DOMContentLoaded", () => {
       doubtsSection.classList.remove("show");
     });
   }
-  
+
   // Close when clicking outside (optional, but good UX for popups)
   document.addEventListener("click", (e) => {
-    if (doubtsSection.classList.contains("show") && 
-        !doubtsSection.contains(e.target) && 
-        !doubtsBtn.contains(e.target) && 
-        !doubtsNavBtn.contains(e.target)) {
+    if (!doubtsSection || !doubtsSection.classList.contains("show")) return;
+    const clickInside = doubtsSection.contains(e.target);
+    const onDoubtsBtn = doubtsBtn && doubtsBtn.contains(e.target);
+    const onNavBtn = doubtsNavBtn && doubtsNavBtn.contains(e.target);
+    if (!clickInside && !onDoubtsBtn && !onNavBtn) {
       doubtsSection.classList.remove("show");
     }
   });

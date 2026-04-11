@@ -203,6 +203,7 @@ document.addEventListener("DOMContentLoaded", function () {
     fontSizeSelect.value = savedFontSize;
     fontSizeSelect.addEventListener("change", (e) => {
       localStorage.setItem("fontSize", e.target.value);
+      if (window.applyAllSettings) window.applyAllSettings();
     });
   }
 

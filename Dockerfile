@@ -14,6 +14,7 @@ RUN pip install --no-cache-dir -r requirements-api.txt
 
 COPY fastapi_app.py ./
 COPY models/ ./models/
+COPY skin-disease-frontend/ ./skin-disease-frontend/
 
 EXPOSE 8000
 

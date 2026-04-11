@@ -3,6 +3,7 @@ uvicorn[standard]==0.30.6
 python-multipart==0.0.9
 numpy==1.26.4
 pillow==10.4.0
-tensorflow-cpu==2.16.2; platform_system != "Darwin"
-tensorflow-macos==2.16.2; platform_system == "Darwin"
-tensorflow-metal==1.2.0; platform_system == "Darwin"
+tensorflow-cpu==2.16.2
+pymongo==4.8.0
+werkzeug==3.0.3
+email-validator==2.2.0

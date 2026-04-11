@@ -234,7 +234,7 @@ input:focus, select:focus {
       <a href="home.html">Home</a>
       <a href="upload.html">Upload</a>
       <a href="consultation.html" class="active">Consultation</a>
-      <a href="doubts.html">Doubts</a>
+      <a href="#" id="doubtsNavBtn">About</a>
       <a href="profile.html">Profile</a>
       <a href="settings.html">Settings</a>
       <a href="#" class="logout" onclick="logoutUser()">Logout</a>
@@ -322,8 +322,9 @@ input:focus, select:focus {
     // redirect to login page
     window.location.href = "login.html";
   }
-  </script>
+</script>
 
+<script src="js/theme.js"></script>
 <script>
   if (localStorage.getItem("darkMode") === "enabled") {
     document.body.classList.add("dark");
