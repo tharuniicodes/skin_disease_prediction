@@ -19,13 +19,11 @@ git push origin main
 5. Wait for deploy to finish and open:
    - `https://<your-service>.onrender.com/healthz`
 
-## 3) Keep it stable for years
+## 3) Free-tier caveats
 
-1. Use a paid instance (`standard`) to avoid sleep and memory crashes.
-2. Attach a custom domain (for LinkedIn sharing): `api.yourdomain.com`.
-3. Enable domain auto-renew at your domain provider.
-4. Set billing alerts in Render and your payment provider.
-5. Add uptime monitoring (UptimeRobot or Better Stack) on `/healthz`.
+1. Free web services can spin down after idle periods.
+2. Free services can restart/suspend based on free-tier usage limits.
+3. Attach a custom domain if you want a cleaner LinkedIn URL: `api.yourdomain.com`.
 
 ## API endpoint
 

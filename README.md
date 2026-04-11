@@ -43,7 +43,7 @@ pip install -r requirements-api.txt
 uvicorn fastapi_app:app --host 0.0.0.0 --port 8000
 ```
 
-### Render deploy (paid, no auto-sleep)
+### Render deploy (free option)
 
 1. Push this repo to GitHub.
 2. In Render, create a new Blueprint service from this repo.
@@ -53,3 +53,5 @@ uvicorn fastapi_app:app --host 0.0.0.0 --port 8000
    - `POST /predict` (form-data key: `image`)
 
 For long-term availability, keep the service on a paid plan and keep billing active.
+
+Note: Free services on Render spin down after idle time and can restart/suspend due to free-tier limits.
