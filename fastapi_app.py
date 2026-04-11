@@ -1,10 +1,10 @@
 import io
 import os
 from datetime import datetime
-from typing import Optional
+from threading import Lock
 
 import numpy as np
-from fastapi import FastAPI, File, UploadFile, Request, HTTPException, Body
+from fastapi import FastAPI, File, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, FileResponse
 from fastapi.staticfiles import StaticFiles
@@ -39,15 +39,34 @@ app.add_middleware(
 tf = None
 class_names = []
 model = None
+model_load_error = None
+model_lock = Lock()
 
-@app.on_event("startup")
-def load_resources():
-    global tf, model, class_names
-    print("Loading TensorFlow...")
-    import tensorflow as tf
-    model = tf.keras.models.load_model(MODEL_PATH)
-    class_names = load_class_names()
-    print("Resources loaded successfully")
+def load_resources() -> tuple[bool, str | None]:
+    global tf, model, class_names, model_load_error
+
+    if model is not None:
+        return True, None
+
+    with model_lock:
+        if model is not None:
+            return True, None
+
+        try:
+            if tf is None:
+                print("Loading TensorFlow...")
+                import tensorflow as tensorflow_mod
+                tf = tensorflow_mod
+                print("TensorFlow loaded")
+
+            class_names = load_class_names()
+            model = tf.keras.models.load_model(MODEL_PATH)
+            model_load_error = None
+            print("Resources loaded successfully")
+            return True, None
+        except Exception as exc:
+            model_load_error = str(exc)
+            return False, model_load_error
 
 def load_class_names() -> list[str]:
     if os.path.exists(CLASS_NAMES_PATH):
@@ -83,12 +102,19 @@ class ResetPassword(BaseModel):
 
 @app.get("/healthz")
 def healthz():
-    return {"status": "ok"}
+    return {"status": "ok", "model_loaded": model is not None}
 
 @app.post("/predict")
 async def predict(image: UploadFile = File(...)):
-    if model is None:
-        return JSONResponse(status_code=503, content={"error": "Model loading..."})
+    loaded, error = load_resources()
+    if not loaded:
+        return JSONResponse(
+            status_code=503,
+            content={
+                "error": "Model failed to load on this instance.",
+                "details": error,
+            },
+        )
     
     try:
         contents = await image.read()
