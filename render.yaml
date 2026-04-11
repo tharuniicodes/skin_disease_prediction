@@ -3,6 +3,6 @@ services:
     name: skin-preprocess-api
     runtime: docker
     dockerfilePath: ./Dockerfile
-    plan: standard
+    plan: free
     autoDeploy: true
     healthCheckPath: /healthz
