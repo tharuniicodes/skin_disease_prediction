@@ -18,6 +18,7 @@ data_effnet/
 results/
 models/*
 !models/effnet_best.keras
+!models/class_names.txt
 
 # Node
 node_modules/
