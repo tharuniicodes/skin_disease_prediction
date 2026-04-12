@@ -1,7 +1,7 @@
 import io
 import os
 from datetime import datetime
-from threading import Lock
+from threading import Lock, Thread
 
 import numpy as np
 from fastapi import FastAPI, File, UploadFile
@@ -41,6 +41,12 @@ class_names = []
 model = None
 model_load_error = None
 model_lock = Lock()
+
+
+@app.on_event("startup")
+def start_background_warmup():
+    # Keep startup fast for Render health checks, then warm model in background.
+    Thread(target=load_resources, daemon=True).start()
 
 def load_resources() -> tuple[bool, str | None]:
     global tf, model, class_names, model_load_error
