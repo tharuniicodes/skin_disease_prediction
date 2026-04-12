@@ -1,30 +1,115 @@
+const REGISTERED_USERS_KEY = "skincareRegisteredUsers";
+
+function normalizeEmail(email) {
+  return String(email || "").trim().toLowerCase();
+}
+
+function readRegisteredUsers() {
+  try {
+    const users = JSON.parse(localStorage.getItem(REGISTERED_USERS_KEY) || "[]");
+    return Array.isArray(users) ? users : [];
+  } catch {
+    return [];
+  }
+}
+
+function writeRegisteredUsers(users) {
+  localStorage.setItem(REGISTERED_USERS_KEY, JSON.stringify(users));
+}
+
+function saveRegisteredUser(user, password) {
+  const email = normalizeEmail(user.email);
+  if (!email || !password) return;
+
+  const users = readRegisteredUsers();
+  const existingIndex = users.findIndex(item => normalizeEmail(item.email) === email);
+  const payload = {
+    username: String(user.username || user.name || "").trim(),
+    email,
+    password
+  };
+
+  if (existingIndex >= 0) {
+    users[existingIndex] = { ...users[existingIndex], ...payload };
+  } else {
+    users.push(payload);
+  }
+
+  writeRegisteredUsers(users);
+}
+
+function findRegisteredUserByEmail(email) {
+  const normalizedEmail = normalizeEmail(email);
+  return readRegisteredUsers().find(user => normalizeEmail(user.email) === normalizedEmail) || null;
+}
+
+function findRegisteredUser(email, password) {
+  const user = findRegisteredUserByEmail(email);
+  return user && user.password === password ? user : null;
+}
+
+function updateRegisteredPassword(email, password) {
+  const normalizedEmail = normalizeEmail(email);
+  const users = readRegisteredUsers();
+  const existingIndex = users.findIndex(user => normalizeEmail(user.email) === normalizedEmail);
+
+  if (existingIndex < 0) return false;
+
+  users[existingIndex].password = password;
+  writeRegisteredUsers(users);
+  return true;
+}
+
+function setActiveUser(user, password) {
+  const activeUser = {
+    username: String(user.username || user.name || "").trim(),
+    email: normalizeEmail(user.email)
+  };
+
+  localStorage.setItem("user", JSON.stringify(activeUser));
+  localStorage.setItem("loggedInUser", activeUser.username);
+  localStorage.setItem("loggedInEmail", activeUser.email);
+  localStorage.setItem("currentUser", activeUser.email || activeUser.username);
+  if (password) localStorage.setItem("userPassword", password);
+}
+
+function loginWithRegisteredBackup(email, password) {
+  const user = findRegisteredUser(email, password);
+  if (!user) return false;
+
+  setActiveUser(user, password);
+  window.location.href = "home.html";
+  return true;
+}
+
 function login() {
   const emailInput = document.getElementById("loginEmail");
   const passwordInput = document.getElementById("loginPassword");
+  const email = normalizeEmail(emailInput.value);
+  const password = passwordInput.value;
 
   fetch("/login", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      email: emailInput.value,
-      password: passwordInput.value
+      email,
+      password
     })
   })
     .then(res => res.json().then(data => ({ ok: res.ok, data })))
     .then(data => {
       if (!data.ok || !data.data.success) {
+        if (loginWithRegisteredBackup(email, password)) return;
         alert(data.data.message || "Invalid email or password");
       } else {
         const user = data.data.data?.user || data.data.user || {};
-        localStorage.setItem("user", JSON.stringify(user));
-        localStorage.setItem("loggedInUser", user.username || "");
-        localStorage.setItem("loggedInEmail", user.email || "");
-        localStorage.setItem("currentUser", user.email || user.username || "");
-        localStorage.setItem("userPassword", passwordInput.value);
+        saveRegisteredUser(user, password);
+        setActiveUser(user, password);
         window.location.href = "home.html";
       }
     })
     .catch(() => {
+      if (loginWithRegisteredBackup(email, password)) return;
       alert("Invalid email or password");
     });
 }
@@ -33,14 +118,19 @@ function signup() {
   const usernameInput = document.getElementById("signupUsername");
   const emailInput = document.getElementById("signupEmail");
   const passwordInput = document.getElementById("signupPassword");
+  const user = {
+    username: usernameInput.value.trim(),
+    email: normalizeEmail(emailInput.value)
+  };
+  const password = passwordInput.value;
 
   fetch("/signup", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      username: usernameInput.value,
-      email: emailInput.value,
-      password: passwordInput.value
+      username: user.username,
+      email: user.email,
+      password
     })
   })
     .then(res => res.json().then(data => ({ ok: res.ok, data })))
@@ -48,15 +138,8 @@ function signup() {
       if (!data.ok || !data.data.success) {
         alert(data.data.message || "Signup failed");
       } else {
-        const user = {
-          username: usernameInput.value.trim(),
-          email: emailInput.value.trim().toLowerCase()
-        };
-        localStorage.setItem("user", JSON.stringify(user));
-        localStorage.setItem("loggedInUser", user.username);
-        localStorage.setItem("loggedInEmail", user.email);
-        localStorage.setItem("currentUser", user.email || user.username);
-        localStorage.setItem("userPassword", passwordInput.value);
+        saveRegisteredUser(user, password);
+        setActiveUser(user, password);
         alert("Signup successful");
         window.location.href = "index.html";
       }
@@ -88,7 +171,7 @@ function backToLogin() {
 
 function handleForgotPassword() {
   const emailInput = document.getElementById("forgotEmail");
-  const email = emailInput.value;
+  const email = normalizeEmail(emailInput.value);
 
   fetch("/forgot-password", {
     method: "POST",
@@ -97,7 +180,7 @@ function handleForgotPassword() {
   })
     .then(res => res.json())
     .then(data => {
-      if (data.success) {
+      if (data.success || findRegisteredUserByEmail(email)) {
         showResetPassword();
       } else {
         alert(data.message || "Error verifying email");
@@ -119,7 +202,7 @@ function showResetPassword() {
 }
 
 function handleResetPassword() {
-  const email = document.getElementById("forgotEmail").value;
+  const email = normalizeEmail(document.getElementById("forgotEmail").value);
   const passwordInput = document.getElementById("newPassword");
   const confirmInput = document.getElementById("confirmPassword");
 
@@ -138,7 +221,7 @@ function handleResetPassword() {
   })
     .then(res => res.json())
     .then(data => {
-      if (data.success) {
+      if (data.success || updateRegisteredPassword(email, passwordInput.value)) {
         alert("Password updated successfully! Please login with your new password.");
         backToLogin();
       } else {

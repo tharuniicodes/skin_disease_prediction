@@ -121,11 +121,30 @@ document.addEventListener("DOMContentLoaded", function () {
     (storedUser && storedUser.password) ||
     "";
 
+  const updateRegisteredPassword = (email, password) => {
+    try {
+      const users = JSON.parse(localStorage.getItem("skincareRegisteredUsers") || "[]");
+      if (!Array.isArray(users)) return;
+
+      const normalizedEmail = String(email || "").trim().toLowerCase();
+      const existingIndex = users.findIndex(user =>
+        String(user.email || "").trim().toLowerCase() === normalizedEmail
+      );
+      if (existingIndex < 0) return;
+
+      users[existingIndex].password = password;
+      localStorage.setItem("skincareRegisteredUsers", JSON.stringify(users));
+    } catch {
+      // Ignore malformed legacy storage.
+    }
+  };
+
   const setStoredPassword = (value) => {
     localStorage.setItem("userPassword", value);
     if (storedUser) {
       storedUser.password = value;
       localStorage.setItem("user", JSON.stringify(storedUser));
+      updateRegisteredPassword(storedUser.email, value);
     }
   };
 
