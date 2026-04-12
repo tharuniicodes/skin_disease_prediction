@@ -13,7 +13,7 @@ function login() {
     .then(res => res.json().then(data => ({ ok: res.ok, data })))
     .then(data => {
       if (!data.ok || !data.data.success) {
-        alert("Invalid email or password");
+        alert(data.data.message || "Invalid email or password");
       } else {
         const user = data.data.user || {};
         localStorage.setItem("user", JSON.stringify(user));

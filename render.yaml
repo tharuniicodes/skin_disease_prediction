@@ -6,3 +6,8 @@ services:
     plan: free
     autoDeploy: true
     healthCheckPath: /healthz
+    envVars:
+      - key: AUTH_STORE_PATH
+        value: /tmp/skincare_ai_users.json
+      - key: MONGODB_DB_NAME
+        value: skincare_ai
