@@ -48,15 +48,15 @@ uvicorn fastapi_app:app --host 0.0.0.0 --port 8000
 1. Push this repo to GitHub.
 2. In Render, create a new Blueprint service from this repo.
 3. Render auto-detects `render.yaml` and deploys using Docker.
-4. Optional: set `MONGODB_URI` in the Render service environment variables.
-   Use a MongoDB Atlas connection string or another MongoDB instance reachable from Render if you need persistent auth data across restarts.
+4. Set `MONGODB_URI` in the Render service environment variables.
+   Use a MongoDB Atlas connection string or another MongoDB instance reachable from Render.
 5. Use the generated URL:
    - `GET /healthz`
    - `POST /predict` (form-data key: `image`)
    - `POST /signup`
    - `POST /login`
 
-Auth endpoints use MongoDB when `MONGODB_URI` is configured. Without MongoDB, the app falls back to a local JSON user store at `AUTH_STORE_PATH` so signup/login still work for demos. Render's free service filesystem is ephemeral, so those fallback users may be lost after restarts or redeploys.
+Auth endpoints require MongoDB. If `MONGODB_URI` is missing or MongoDB is unreachable, signup/login return a `503` database configuration error instead of using demo/static storage.
 
 For long-term availability, keep the service on a paid plan and keep billing active.
 

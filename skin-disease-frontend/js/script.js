@@ -1,66 +1,8 @@
-const REGISTERED_USERS_KEY = "skincareRegisteredUsers";
-
 function normalizeEmail(email) {
   return String(email || "").trim().toLowerCase();
 }
 
-function readRegisteredUsers() {
-  try {
-    const users = JSON.parse(localStorage.getItem(REGISTERED_USERS_KEY) || "[]");
-    return Array.isArray(users) ? users : [];
-  } catch {
-    return [];
-  }
-}
-
-function writeRegisteredUsers(users) {
-  localStorage.setItem(REGISTERED_USERS_KEY, JSON.stringify(users));
-}
-
-function saveRegisteredUser(user, password) {
-  const email = normalizeEmail(user.email);
-  if (!email || !password) return;
-
-  const users = readRegisteredUsers();
-  const existingIndex = users.findIndex(item => normalizeEmail(item.email) === email);
-  const payload = {
-    username: String(user.username || user.name || "").trim(),
-    email,
-    password
-  };
-
-  if (existingIndex >= 0) {
-    users[existingIndex] = { ...users[existingIndex], ...payload };
-  } else {
-    users.push(payload);
-  }
-
-  writeRegisteredUsers(users);
-}
-
-function findRegisteredUserByEmail(email) {
-  const normalizedEmail = normalizeEmail(email);
-  return readRegisteredUsers().find(user => normalizeEmail(user.email) === normalizedEmail) || null;
-}
-
-function findRegisteredUser(email, password) {
-  const user = findRegisteredUserByEmail(email);
-  return user && user.password === password ? user : null;
-}
-
-function updateRegisteredPassword(email, password) {
-  const normalizedEmail = normalizeEmail(email);
-  const users = readRegisteredUsers();
-  const existingIndex = users.findIndex(user => normalizeEmail(user.email) === normalizedEmail);
-
-  if (existingIndex < 0) return false;
-
-  users[existingIndex].password = password;
-  writeRegisteredUsers(users);
-  return true;
-}
-
-function setActiveUser(user, password) {
+function setActiveUser(user) {
   const activeUser = {
     username: String(user.username || user.name || "").trim(),
     email: normalizeEmail(user.email)
@@ -70,16 +12,6 @@ function setActiveUser(user, password) {
   localStorage.setItem("loggedInUser", activeUser.username);
   localStorage.setItem("loggedInEmail", activeUser.email);
   localStorage.setItem("currentUser", activeUser.email || activeUser.username);
-  if (password) localStorage.setItem("userPassword", password);
-}
-
-function loginWithRegisteredBackup(email, password) {
-  const user = findRegisteredUser(email, password);
-  if (!user) return false;
-
-  setActiveUser(user, password);
-  window.location.href = "home.html";
-  return true;
 }
 
 function login() {
@@ -99,17 +31,14 @@ function login() {
     .then(res => res.json().then(data => ({ ok: res.ok, data })))
     .then(data => {
       if (!data.ok || !data.data.success) {
-        if (loginWithRegisteredBackup(email, password)) return;
         alert(data.data.message || "Invalid email or password");
       } else {
         const user = data.data.data?.user || data.data.user || {};
-        saveRegisteredUser(user, password);
-        setActiveUser(user, password);
+        setActiveUser(user);
         window.location.href = "home.html";
       }
     })
     .catch(() => {
-      if (loginWithRegisteredBackup(email, password)) return;
       alert("Invalid email or password");
     });
 }
@@ -138,8 +67,7 @@ function signup() {
       if (!data.ok || !data.data.success) {
         alert(data.data.message || "Signup failed");
       } else {
-        saveRegisteredUser(user, password);
-        setActiveUser(user, password);
+        setActiveUser(user);
         alert("Signup successful");
         window.location.href = "index.html";
       }
@@ -180,7 +108,7 @@ function handleForgotPassword() {
   })
     .then(res => res.json())
     .then(data => {
-      if (data.success || findRegisteredUserByEmail(email)) {
+      if (data.success) {
         showResetPassword();
       } else {
         alert(data.message || "Error verifying email");
@@ -221,7 +149,7 @@ function handleResetPassword() {
   })
     .then(res => res.json())
     .then(data => {
-      if (data.success || updateRegisteredPassword(email, passwordInput.value)) {
+      if (data.success) {
         alert("Password updated successfully! Please login with your new password.");
         backToLogin();
       } else {

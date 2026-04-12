@@ -1,5 +1,4 @@
 import io
-import json
 import os
 from datetime import datetime
 from threading import Lock, Thread
@@ -25,7 +24,6 @@ IMG_SIZE = (224, 224)
 MONGODB_URI = os.getenv("MONGODB_URI") or os.getenv("MONGO_URI")
 MONGODB_DB_NAME = os.getenv("MONGODB_DB_NAME", "skincare_ai")
 MONGODB_TIMEOUT_MS = int(os.getenv("MONGODB_TIMEOUT_MS", "5000"))
-AUTH_STORE_PATH = os.getenv("AUTH_STORE_PATH", "/tmp/skincare_ai_users.json")
 mongo_client = None
 users_collection = None
 
@@ -45,14 +43,13 @@ class_names = []
 model = None
 model_load_error = None
 model_lock = Lock()
-auth_store_lock = Lock()
 
 
 @app.on_event("startup")
 def start_background_warmup():
     # Keep startup fast for Render health checks, then warm model in background.
     if not MONGODB_URI:
-        print(f"MONGODB_URI is not configured; auth will use local file store: {AUTH_STORE_PATH}")
+        print("MONGODB_URI is not configured; auth endpoints will return 503.")
     Thread(target=load_resources, daemon=True).start()
 
 def get_users_collection():
@@ -77,122 +74,77 @@ def get_users_collection():
     except PyMongoError as exc:
         mongo_client = None
         users_collection = None
-        print(f"MongoDB connection failed; using local file store instead: {exc}")
+        print(f"MongoDB connection failed: {exc}")
         return None
 
 def auth_backend_name() -> str:
-    if users_collection is not None:
-        return "mongodb"
-    if MONGODB_URI:
-        return "mongodb_or_local_file"
-    return "local_file"
+    if not MONGODB_URI:
+        return "not_configured"
+    return "mongodb" if get_users_collection() is not None else "mongodb_unavailable"
 
 def normalize_email(email: str) -> str:
     return email.strip().lower()
 
-def load_file_users() -> list[dict]:
-    if not os.path.exists(AUTH_STORE_PATH):
-        return []
+def auth_unavailable_response():
+    if not MONGODB_URI:
+        message = "MongoDB is not configured. Set MONGODB_URI in Render environment variables."
+    else:
+        message = "MongoDB is unavailable. Check MONGODB_URI and MongoDB network access."
+    return JSONResponse(status_code=503, content={"success": False, "message": message})
 
-    try:
-        with open(AUTH_STORE_PATH, "r", encoding="utf-8") as f:
-            data = json.load(f)
-    except (OSError, json.JSONDecodeError):
-        return []
-
-    if not isinstance(data, list):
-        return []
-    return [user for user in data if isinstance(user, dict)]
-
-def save_file_users(users: list[dict]) -> None:
-    directory = os.path.dirname(AUTH_STORE_PATH)
-    if directory:
-        os.makedirs(directory, exist_ok=True)
-
-    temp_path = f"{AUTH_STORE_PATH}.tmp"
-    with open(temp_path, "w", encoding="utf-8") as f:
-        json.dump(users, f, indent=2)
-    os.replace(temp_path, AUTH_STORE_PATH)
-
-def find_file_user(email: str) -> dict | None:
-    normalized_email = normalize_email(email)
-    with auth_store_lock:
-        for user in load_file_users():
-            if normalize_email(user.get("email", "")) == normalized_email:
-                return user
-    return None
-
-def insert_file_user(user_doc: dict) -> bool:
-    normalized_email = normalize_email(user_doc["email"])
-    with auth_store_lock:
-        users = load_file_users()
-        if any(normalize_email(user.get("email", "")) == normalized_email for user in users):
-            return False
-        users.append(user_doc)
-        save_file_users(users)
-    return True
-
-def update_file_user_password(email: str, hashed_password: str) -> bool:
-    normalized_email = normalize_email(email)
-    with auth_store_lock:
-        users = load_file_users()
-        for user in users:
-            if normalize_email(user.get("email", "")) == normalized_email:
-                user["password"] = hashed_password
-                user["updatedAt"] = datetime.utcnow().isoformat()
-                save_file_users(users)
-                return True
-    return False
+def get_required_users_collection():
+    return get_users_collection()
 
 def find_auth_user(email: str) -> dict | None:
-    collection = get_users_collection()
+    collection = get_required_users_collection()
     normalized_email = normalize_email(email)
+    if collection is None:
+        return None
 
-    if collection is not None:
-        try:
-            return collection.find_one({"email": normalized_email})
-        except PyMongoError as exc:
-            print(f"MongoDB read failed; using local file store instead: {exc}")
-
-    return find_file_user(normalized_email)
+    try:
+        return collection.find_one({"email": normalized_email})
+    except PyMongoError as exc:
+        print(f"MongoDB read failed: {exc}")
+        return None
 
 def create_auth_user(username: str, email: str, password: str) -> bool:
-    collection = get_users_collection()
+    collection = get_required_users_collection()
     normalized_email = normalize_email(email)
+    if collection is None:
+        return False
+
     user_doc = {
         "username": username.strip(),
         "email": normalized_email,
         "password": generate_password_hash(password),
-        "createdAt": datetime.utcnow().isoformat(),
+        "createdAt": datetime.utcnow(),
     }
 
-    if collection is not None:
-        try:
-            if collection.find_one({"email": normalized_email}):
-                return False
-            collection.insert_one({**user_doc, "createdAt": datetime.utcnow()})
-            return True
-        except PyMongoError as exc:
-            print(f"MongoDB write failed; using local file store instead: {exc}")
-
-    return insert_file_user(user_doc)
+    try:
+        if collection.find_one({"email": normalized_email}):
+            return False
+        collection.insert_one(user_doc)
+        return True
+    except PyMongoError as exc:
+        print(f"MongoDB write failed: {exc}")
+        return False
 
 def update_auth_password(email: str, password: str) -> bool:
-    collection = get_users_collection()
+    collection = get_required_users_collection()
     normalized_email = normalize_email(email)
     hashed_password = generate_password_hash(password)
+    if collection is None:
+        return False
 
-    if collection is not None:
-        try:
-            result = collection.update_one(
-                {"email": normalized_email},
-                {"$set": {"password": hashed_password, "updatedAt": datetime.utcnow()}},
-            )
-            return result.matched_count > 0
-        except PyMongoError as exc:
-            print(f"MongoDB update failed; using local file store instead: {exc}")
-
-    return update_file_user_password(normalized_email, hashed_password)
+    try:
+        result = collection.update_one(
+            {"email": normalized_email},
+            {"$set": {"password": hashed_password, "updatedAt": datetime.utcnow()}},
+        )
+        return result.matched_count > 0
+    except PyMongoError as exc:
+        print(f"MongoDB update failed: {exc}")
+        return False
 
 def load_resources() -> tuple[bool, str | None]:
     global tf, model, class_names, model_load_error
@@ -280,6 +232,9 @@ async def predict(image: UploadFile = File(...)):
 
 @app.post("/signup")
 async def signup(user: UserSignup):
+    if get_required_users_collection() is None:
+        return auth_unavailable_response()
+
     if find_auth_user(user.email):
         return {"success": False, "message": "User already exists"}
 
@@ -290,6 +245,9 @@ async def signup(user: UserSignup):
 
 @app.post("/login")
 async def login(user: UserLogin):
+    if get_required_users_collection() is None:
+        return auth_unavailable_response()
+
     db_user = find_auth_user(user.email)
     if not db_user or not db_user.get("password") or not check_password_hash(db_user["password"], user.password):
         return {"success": False, "message": "Invalid email or password"}
@@ -304,6 +262,9 @@ async def login(user: UserLogin):
 
 @app.post("/forgot-password")
 async def forgot_password(data: ForgotPassword):
+    if get_required_users_collection() is None:
+        return auth_unavailable_response()
+
     user = find_auth_user(data.email)
     if not user:
         return {"success": False, "message": "Email not registered"}
@@ -311,6 +272,9 @@ async def forgot_password(data: ForgotPassword):
 
 @app.post("/reset-password")
 async def reset_password(data: ResetPassword):
+    if get_required_users_collection() is None:
+        return auth_unavailable_response()
+
     if not update_auth_password(data.email, data.password):
         return {"success": False, "message": "Failed to update password"}
     return {"success": True, "message": "Password updated successfully"}

@@ -116,38 +116,6 @@ document.addEventListener("DOMContentLoaded", function () {
   const passwordError = document.getElementById("passwordError");
   const passwordSuccessMsg = document.getElementById("passwordSuccessMsg");
 
-  const getStoredPassword = () =>
-    localStorage.getItem("userPassword") ||
-    (storedUser && storedUser.password) ||
-    "";
-
-  const updateRegisteredPassword = (email, password) => {
-    try {
-      const users = JSON.parse(localStorage.getItem("skincareRegisteredUsers") || "[]");
-      if (!Array.isArray(users)) return;
-
-      const normalizedEmail = String(email || "").trim().toLowerCase();
-      const existingIndex = users.findIndex(user =>
-        String(user.email || "").trim().toLowerCase() === normalizedEmail
-      );
-      if (existingIndex < 0) return;
-
-      users[existingIndex].password = password;
-      localStorage.setItem("skincareRegisteredUsers", JSON.stringify(users));
-    } catch {
-      // Ignore malformed legacy storage.
-    }
-  };
-
-  const setStoredPassword = (value) => {
-    localStorage.setItem("userPassword", value);
-    if (storedUser) {
-      storedUser.password = value;
-      localStorage.setItem("user", JSON.stringify(storedUser));
-      updateRegisteredPassword(storedUser.email, value);
-    }
-  };
-
   const openPasswordModal = () => {
     if (!passwordModal) return;
     passwordModal.classList.add("open");
@@ -180,18 +148,18 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   if (passwordSaveBtn) {
-    passwordSaveBtn.addEventListener("click", () => {
+    passwordSaveBtn.addEventListener("click", async () => {
       const current = currentPasswordInput ? currentPasswordInput.value.trim() : "";
       const next = newPasswordInput ? newPasswordInput.value.trim() : "";
       const confirm = confirmPasswordInput ? confirmPasswordInput.value.trim() : "";
-      const storedPassword = getStoredPassword();
+      const email = storedUser ? storedUser.email : "";
 
-      if (!storedPassword) {
-        if (passwordError) passwordError.textContent = "No stored password found. Please log in again.";
+      if (!email) {
+        if (passwordError) passwordError.textContent = "No logged-in email found. Please log in again.";
         return;
       }
-      if (current !== storedPassword) {
-        if (passwordError) passwordError.textContent = "Current password is incorrect.";
+      if (!current) {
+        if (passwordError) passwordError.textContent = "Enter your current password.";
         return;
       }
       if (!next || next.length < 6) {
@@ -203,13 +171,43 @@ document.addEventListener("DOMContentLoaded", function () {
         return;
       }
 
-      setStoredPassword(next);
-      closePasswordModal();
-      if (passwordSuccessMsg) {
-        passwordSuccessMsg.style.opacity = 1;
-        setTimeout(() => {
-          passwordSuccessMsg.style.opacity = 0;
-        }, 2000);
+      try {
+        passwordSaveBtn.disabled = true;
+        if (passwordError) passwordError.textContent = "";
+
+        const loginRes = await fetch("/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password: current })
+        });
+        const loginData = await loginRes.json();
+        if (!loginRes.ok || !loginData.success) {
+          if (passwordError) passwordError.textContent = loginData.message || "Current password is incorrect.";
+          return;
+        }
+
+        const resetRes = await fetch("/reset-password", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password: next })
+        });
+        const resetData = await resetRes.json();
+        if (!resetRes.ok || !resetData.success) {
+          if (passwordError) passwordError.textContent = resetData.message || "Failed to update password.";
+          return;
+        }
+
+        closePasswordModal();
+        if (passwordSuccessMsg) {
+          passwordSuccessMsg.style.opacity = 1;
+          setTimeout(() => {
+            passwordSuccessMsg.style.opacity = 0;
+          }, 2000);
+        }
+      } catch {
+        if (passwordError) passwordError.textContent = "Password update failed. Please try again.";
+      } finally {
+        passwordSaveBtn.disabled = false;
       }
     });
   }
