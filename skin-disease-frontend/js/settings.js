@@ -3,9 +3,22 @@ document.addEventListener("DOMContentLoaded", function () {
      LOAD USER FROM LOGIN
      ========================= */
 
-  const storedUser =
-    JSON.parse(localStorage.getItem("user") || "null") ||
-    JSON.parse(localStorage.getItem("loggedInUser") || "null");
+  const getLoggedInUser = () => {
+    try {
+      const user = JSON.parse(localStorage.getItem("user") || "null");
+      if (user && (user.username || user.name || user.email)) {
+        return user;
+      }
+    } catch {
+      // Fall back to legacy keys below.
+    }
+
+    const username = localStorage.getItem("loggedInUser") || "";
+    const email = localStorage.getItem("loggedInEmail") || "";
+    return username || email ? { username, email } : null;
+  };
+
+  const storedUser = getLoggedInUser();
 
   if (storedUser) {
     document.getElementById("displayName").textContent =

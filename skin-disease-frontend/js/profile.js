@@ -3,24 +3,34 @@ function clearHistory() {
   location.reload();
 }
 
+function getLoggedInUser() {
+  try {
+    const user = JSON.parse(localStorage.getItem("user") || "null");
+    if (user && (user.username || user.name || user.email)) {
+      return user;
+    }
+  } catch {
+    // Fall back to legacy keys below.
+  }
+
+  const username = localStorage.getItem("loggedInUser") || "";
+  const email = localStorage.getItem("loggedInEmail") || "";
+  return username || email ? { username, email } : null;
+}
+
 document.addEventListener("DOMContentLoaded", () => {
-  const storedUser =
-    JSON.parse(localStorage.getItem("user") || "null") ||
-    JSON.parse(localStorage.getItem("loggedInUser") || "null") ||
-    null;
+  const storedUser = getLoggedInUser();
 
   const profileName = document.getElementById("profileName");
   const profileEmail = document.getElementById("profileEmail");
   if (profileName) {
     profileName.textContent =
       (storedUser && (storedUser.username || storedUser.name)) ||
-      localStorage.getItem("loggedInUser") ||
       profileName.textContent;
   }
   if (profileEmail) {
     profileEmail.textContent =
       (storedUser && storedUser.email) ||
-      localStorage.getItem("loggedInEmail") ||
       profileEmail.textContent;
   }
 
@@ -189,8 +199,11 @@ document.addEventListener("DOMContentLoaded", () => {
   const logoutBtn = document.getElementById("logoutBtn");
   if (logoutBtn) {
     logoutBtn.addEventListener("click", () => {
+      localStorage.removeItem("user");
       localStorage.removeItem("currentUser");
       localStorage.removeItem("loggedInUser");
+      localStorage.removeItem("loggedInEmail");
+      localStorage.removeItem("userPassword");
       window.location.href = "index.html";
     });
   }

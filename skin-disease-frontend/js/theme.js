@@ -37,8 +37,11 @@
     logoutLinks.forEach(link => {
       link.addEventListener("click", (e) => {
         e.preventDefault();
+        localStorage.removeItem("user");
         localStorage.removeItem("currentUser");
         localStorage.removeItem("loggedInUser");
+        localStorage.removeItem("loggedInEmail");
+        localStorage.removeItem("userPassword");
         window.location.href = `${window.location.origin}/index.html`;
       });
     });

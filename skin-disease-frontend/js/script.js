@@ -15,10 +15,11 @@ function login() {
       if (!data.ok || !data.data.success) {
         alert(data.data.message || "Invalid email or password");
       } else {
-        const user = data.data.user || {};
+        const user = data.data.data?.user || data.data.user || {};
         localStorage.setItem("user", JSON.stringify(user));
         localStorage.setItem("loggedInUser", user.username || "");
         localStorage.setItem("loggedInEmail", user.email || "");
+        localStorage.setItem("currentUser", user.email || user.username || "");
         localStorage.setItem("userPassword", passwordInput.value);
         window.location.href = "home.html";
       }
@@ -47,8 +48,14 @@ function signup() {
       if (!data.ok || !data.data.success) {
         alert(data.data.message || "Signup failed");
       } else {
-        localStorage.setItem("loggedInUser", usernameInput.value);
-        localStorage.setItem("loggedInEmail", emailInput.value);
+        const user = {
+          username: usernameInput.value.trim(),
+          email: emailInput.value.trim().toLowerCase()
+        };
+        localStorage.setItem("user", JSON.stringify(user));
+        localStorage.setItem("loggedInUser", user.username);
+        localStorage.setItem("loggedInEmail", user.email);
+        localStorage.setItem("currentUser", user.email || user.username);
         localStorage.setItem("userPassword", passwordInput.value);
         alert("Signup successful");
         window.location.href = "index.html";
